@@ -1,2 +1,10 @@
 # PST2Repo
-Repo for our project
+
+Project Studio Tech Group 2
+-this is our project repo
+
+Names:
+-Sean Tillman
+-
+-
+-
