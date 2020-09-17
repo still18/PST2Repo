@@ -1,4 +1,4 @@
-# PST2Repo
+### PST2Repo
 
 # Project Studio Tech Group 2
 This is our project repo. We are working 
