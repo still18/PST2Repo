@@ -9,4 +9,4 @@ playback music based on surrondings.
 - Sean Tillman, sean.tillman@gatech.edu
 - Joe Hackman, hackman.joseph@gatech.edu
 - Eli Ruckle, eliruckle@gatech.edu
-- 
+- Will Smith, wsmith324@gatech.edu
