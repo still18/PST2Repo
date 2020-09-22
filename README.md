@@ -8,5 +8,5 @@ playback music based on surrondings.
 ## Members
 - Sean Tillman, sean.tillman@gatech.edu
 - Joe Hackman, hackman.joseph@gatech.edu
-- 
+- Eli Ruckle, eliruckle@gatech.edu
 - 
