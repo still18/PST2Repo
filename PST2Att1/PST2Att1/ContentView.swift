@@ -10,15 +10,24 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
             Text("Hello other teammates")
                 .font(.title)
                 .fontWeight(.black)
                 .foregroundColor(Color.yellow)
-            Text("Here is some test UI")
-                .font(.subheadline)
-                .fontWeight(.medium)
-                .foregroundColor(Color.purple)
+                .padding()
+            HStack {
+                Text("Here is some test UI")
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                    .foregroundColor(Color.purple)
+                    .padding()
+                Spacer()
+                Text("And more here")
+                    .font(.subheadline)
+                    .foregroundColor(Color.blue)
+                    .padding()
+            }
         }
         
     }
@@ -30,3 +39,4 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
     }
 }
+
