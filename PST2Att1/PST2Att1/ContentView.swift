@@ -8,28 +8,40 @@
 
 import SwiftUI
 
+   var y : Int = 0
+
 struct ContentView: View {
+    @State var yes = String(y)
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack() {
+            Circ()
+            
+            VStack(alignment: .leading) {
             Text("Hello other teammates")
                 .font(.title)
                 .fontWeight(.black)
                 .foregroundColor(Color.yellow)
-                .padding()
             HStack {
                 Text("Here is some test UI")
                     .font(.subheadline)
                     .fontWeight(.medium)
                     .foregroundColor(Color.purple)
-                    .padding()
-                Spacer()
                 Text("And more here")
                     .font(.subheadline)
                     .foregroundColor(Color.blue)
-                    .padding()
             }
         }
-        
+            
+            
+            Text(yes).padding()
+            
+            Button(action: {y = y + 1
+                self.yes = String(y)
+            }) {
+            Text("Press 4 fun")
+            }
+            
+        }
     }
     
 }
