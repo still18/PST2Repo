@@ -13,10 +13,26 @@ import SwiftUI
 struct ContentView: View {
     @State var yes = String(y)
     var body: some View {
+        ScrollView {
         VStack() {
-            Circ()
             
-            VStack(alignment: .leading) {
+            Spacer().frame(height: 50)
+            
+            Text("What are you doing right now?")
+                .font(.headline)
+            
+            Picker(selection: /*@START_MENU_TOKEN@*/.constant(1)/*@END_MENU_TOKEN@*/, label: Text("")) {
+            Text("Option 1").tag(1)
+            Text("Option 2").tag(2)
+            Text("Option 3").tag(3)
+            Text("Option 3").tag(4)
+            }
+            .padding(-80.0)
+            .frame(width: -1.0)
+            
+            Spacer().frame(height: 85)
+            
+            VStack(/*alignment: .leading*/) {
             Text("Hello other teammates")
                 .font(.title)
                 .fontWeight(.black)
@@ -42,7 +58,7 @@ struct ContentView: View {
             }
             
         }
-    }
+        }}
     
 }
 
