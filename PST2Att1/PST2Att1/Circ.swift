@@ -10,10 +10,14 @@ import SwiftUI
 
 struct Circ: View {
     var body: some View {
+        VStack() {
         Image("stock1")
             .clipShape(/*@START_MENU_TOKEN@*/Circle()/*@END_MENU_TOKEN@*/).overlay(
             Circle().stroke(Color.gray, lineWidth: 4))
-            .shadow(radius: 10)
+            .shadow(radius: 5)
+        Image("stock1")
+        
+    }
     }
 }
 

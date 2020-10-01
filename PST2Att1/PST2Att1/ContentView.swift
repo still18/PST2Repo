@@ -12,11 +12,58 @@ import SwiftUI
 
 struct ContentView: View {
     @State var yes = String(y)
+    @State var tempo: Double =  120
     var body: some View {
+        ScrollView {
         VStack() {
-            Circ()
             
-            VStack(alignment: .leading) {
+            Spacer().frame(height: 50)
+            
+            VStack() {
+            Text("What are you doing right now?")
+                .font(.headline)
+            Picker(selection: /*@START_MENU_TOKEN@*/.constant(1)/*@END_MENU_TOKEN@*/, label: Text("")) {
+            Text("Option 1").tag(1)
+            Text("Option 2").tag(2)
+            Text("Option 3").tag(3)
+            Text("Option 4").tag(4)
+            }
+            .padding(-80.0)
+            .frame(width: -1.0)
+            Spacer().frame(height: 85)
+            }
+            
+            VStack() {
+            Text("[insert genre selector]")
+            }
+            
+            VStack() {
+            Spacer().frame(height: 30)
+            Text("What sort of mood are you in").font(.headline)
+            Picker(selection: /*@START_MENU_TOKEN@*/.constant(1)/*@END_MENU_TOKEN@*/, label: Text("")) {
+            Text("Option 1").tag(11)
+            Text("Option 2").tag(22)
+            Text("Option 3").tag(33)
+            Text("Option 4").tag(44)
+            }
+            .padding(-80.0)
+            .frame(width: -1.0)
+            Spacer().frame(height: 85)
+            }
+ 
+            
+            
+            VStack(){
+                Text("Select your speed/tempo").font(.headline)
+                Slider(value: $tempo, in: 40...200)
+                    .frame(width: -300)
+                Text("\(Int(tempo))")
+                Spacer().frame(height: 20)
+            }
+            
+            
+            //This stuff below is just test stuff, it's not important to our intial project it's just for reference
+            VStack(/*alignment: .leading*/) {
             Text("Hello other teammates")
                 .font(.title)
                 .fontWeight(.black)
@@ -31,18 +78,14 @@ struct ContentView: View {
                     .foregroundColor(Color.blue)
             }
         }
-            
-            
             Text(yes).padding()
-            
             Button(action: {y = y + 1
                 self.yes = String(y)
             }) {
             Text("Press 4 fun")
             }
-            
         }
-    }
+        }}
     
 }
 
