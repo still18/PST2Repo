@@ -7,12 +7,17 @@
 //
 
 import SwiftUI
+import UIKit
 
    var y : Int = 0
 
 struct ContentView: View {
     @State var yes = String(y)
     @State var tempo: Double =  120
+    @State var g1: Bool = false
+    @State var g2: Bool = false
+    @State var g3: Bool = false
+    
     var body: some View {
         ScrollView {
         VStack() {
@@ -22,33 +27,56 @@ struct ContentView: View {
             VStack() {
             Text("What are you doing right now?")
                 .font(.headline)
-            Picker(selection: /*@START_MENU_TOKEN@*/.constant(1)/*@END_MENU_TOKEN@*/, label: Text("")) {
+                Picker(selection: .constant(3), label: Text("")) {
             Text("Option 1").tag(1)
             Text("Option 2").tag(2)
             Text("Option 3").tag(3)
             Text("Option 4").tag(4)
+            Text("Option 5").tag(5)
             }
-            .padding(-80.0)
-            .frame(width: -1.0)
-            Spacer().frame(height: 85)
+            //.padding(-90.0)
+            .frame(width: -200.0, height: 180)
+            Spacer().frame(height: 0)
+            }
+ 
+            
+            
+            VStack() {
+            Text("Select the genres you'd like to hear")
+                .font(.headline)
+                
+               Toggle(isOn: $g1) {
+               Text("Genre1")
+               }
+               .padding(.horizontal)
+               .frame(width: -250.0, height: 30)
+                
+               Toggle(isOn: $g2) {
+                Text("Genre2")
+                }
+                .padding(.horizontal)
+                .frame(width: -250.0, height: 30)
+                
+                Toggle(isOn: $g3) {
+                Text("Genre3")
+                }
+                .padding(.horizontal)
+                .frame(width: -250.0, height: 30)
             }
             
             VStack() {
-            Text("[insert genre selector]")
-            }
-            
-            VStack() {
-            Spacer().frame(height: 30)
+            Spacer().frame(height: 25)
             Text("What sort of mood are you in").font(.headline)
-            Picker(selection: /*@START_MENU_TOKEN@*/.constant(1)/*@END_MENU_TOKEN@*/, label: Text("")) {
+                Picker(selection: .constant(33), label: Text("")) {
             Text("Option 1").tag(11)
             Text("Option 2").tag(22)
             Text("Option 3").tag(33)
             Text("Option 4").tag(44)
+            Text("Option 5").tag(55)
             }
-            .padding(-80.0)
-            .frame(width: -1.0)
-            Spacer().frame(height: 85)
+            //.padding(-90.0)
+            .frame(width: -200.0, height: 180)
+            Spacer().frame(height: 0)
             }
  
             

@@ -15,6 +15,7 @@
 		60A4CC89251D73F3001BEA84 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 60A4CC87251D73F3001BEA84 /* LaunchScreen.storyboard */; };
 		60A4CC94251D73F3001BEA84 /* PST2Att1Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A4CC93251D73F3001BEA84 /* PST2Att1Tests.swift */; };
 		60A4CC9F251D73F4001BEA84 /* PST2Att1UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A4CC9E251D73F4001BEA84 /* PST2Att1UITests.swift */; };
+		60E88CB7252FEE4B0006607E /* SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60E88CB6252FEE4B0006607E /* SwiftUIView.swift */; };
 		60F8C54F251D90FC00D825FB /* Circ.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F8C54E251D90FC00D825FB /* Circ.swift */; };
 /* End PBXBuildFile section */
 
@@ -50,6 +51,7 @@
 		60A4CC9A251D73F4001BEA84 /* PST2Att1UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PST2Att1UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		60A4CC9E251D73F4001BEA84 /* PST2Att1UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PST2Att1UITests.swift; sourceTree = "<group>"; };
 		60A4CCA0251D73F4001BEA84 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		60E88CB6252FEE4B0006607E /* SwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIView.swift; sourceTree = "<group>"; };
 		60F8C54E251D90FC00D825FB /* Circ.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Circ.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -104,6 +106,7 @@
 				60A4CC7C251D73F3001BEA84 /* AppDelegate.swift */,
 				60A4CC7E251D73F3001BEA84 /* SceneDelegate.swift */,
 				60A4CC80251D73F3001BEA84 /* ContentView.swift */,
+				60E88CB6252FEE4B0006607E /* SwiftUIView.swift */,
 				60F8C54E251D90FC00D825FB /* Circ.swift */,
 				60A4CC82251D73F3001BEA84 /* Assets.xcassets */,
 				60A4CC87251D73F3001BEA84 /* LaunchScreen.storyboard */,
@@ -274,6 +277,7 @@
 				60A4CC7F251D73F3001BEA84 /* SceneDelegate.swift in Sources */,
 				60F8C54F251D90FC00D825FB /* Circ.swift in Sources */,
 				60A4CC81251D73F3001BEA84 /* ContentView.swift in Sources */,
+				60E88CB7252FEE4B0006607E /* SwiftUIView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
