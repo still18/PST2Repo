@@ -35,7 +35,7 @@ struct ContentView: View {
             Text("Option 5").tag(5)
             }
             //.padding(-90.0)
-            .frame(width: -1.0, height: 180)
+            .frame(width: -200.0, height: 180)
             Spacer().frame(height: 0)
             }
  
@@ -75,7 +75,7 @@ struct ContentView: View {
             Text("Option 5").tag(55)
             }
             //.padding(-90.0)
-            .frame(width: -1.0, height: 180)
+            .frame(width: -200.0, height: 180)
             Spacer().frame(height: 0)
             }
  
