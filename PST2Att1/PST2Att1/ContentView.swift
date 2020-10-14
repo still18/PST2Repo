@@ -80,7 +80,6 @@ struct ContentView: View {
             }
  
             
-            
             VStack(){
                 Text("Select your speed/tempo").font(.headline)
                 Slider(value: $tempo, in: 40...200)
@@ -89,8 +88,13 @@ struct ContentView: View {
                 Spacer().frame(height: 20)
             }
             
+            VStack(){
+                Text("Audio recorder options here")
+            }
+            
             
             //This stuff below is just test stuff, it's not important to our intial project it's just for reference
+            /*
             VStack(/*alignment: .leading*/) {
             Text("Hello other teammates")
                 .font(.title)
@@ -112,8 +116,11 @@ struct ContentView: View {
             }) {
             Text("Press 4 fun")
             }
+        
+             */
         }
-        }}
+        }
+    }
     
 }
 

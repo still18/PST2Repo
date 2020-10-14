@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		605DB45C2536A27B004274D5 /* AudioPlayback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605DB45B2536A27B004274D5 /* AudioPlayback.swift */; };
+		605DB45F2536A88D004274D5 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 605DB45E2536A88D004274D5 /* MediaPlayer.framework */; };
 		60A4CC7D251D73F3001BEA84 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A4CC7C251D73F3001BEA84 /* AppDelegate.swift */; };
 		60A4CC7F251D73F3001BEA84 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A4CC7E251D73F3001BEA84 /* SceneDelegate.swift */; };
 		60A4CC81251D73F3001BEA84 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A4CC80251D73F3001BEA84 /* ContentView.swift */; };
@@ -37,6 +39,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		605DB45B2536A27B004274D5 /* AudioPlayback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayback.swift; sourceTree = "<group>"; };
+		605DB45E2536A88D004274D5 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		60A4CC79251D73F3001BEA84 /* PST2Att1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PST2Att1.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		60A4CC7C251D73F3001BEA84 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		60A4CC7E251D73F3001BEA84 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -60,6 +64,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				605DB45F2536A88D004274D5 /* MediaPlayer.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -80,6 +85,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		605DB45D2536A88D004274D5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				605DB45E2536A88D004274D5 /* MediaPlayer.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		60A4CC70251D73F3001BEA84 = {
 			isa = PBXGroup;
 			children = (
@@ -87,6 +100,7 @@
 				60A4CC92251D73F3001BEA84 /* PST2Att1Tests */,
 				60A4CC9D251D73F4001BEA84 /* PST2Att1UITests */,
 				60A4CC7A251D73F3001BEA84 /* Products */,
+				605DB45D2536A88D004274D5 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -106,6 +120,7 @@
 				60A4CC7C251D73F3001BEA84 /* AppDelegate.swift */,
 				60A4CC7E251D73F3001BEA84 /* SceneDelegate.swift */,
 				60A4CC80251D73F3001BEA84 /* ContentView.swift */,
+				605DB45B2536A27B004274D5 /* AudioPlayback.swift */,
 				60E88CB6252FEE4B0006607E /* SwiftUIView.swift */,
 				60F8C54E251D90FC00D825FB /* Circ.swift */,
 				60A4CC82251D73F3001BEA84 /* Assets.xcassets */,
@@ -274,6 +289,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				60A4CC7D251D73F3001BEA84 /* AppDelegate.swift in Sources */,
+				605DB45C2536A27B004274D5 /* AudioPlayback.swift in Sources */,
 				60A4CC7F251D73F3001BEA84 /* SceneDelegate.swift in Sources */,
 				60F8C54F251D90FC00D825FB /* Circ.swift in Sources */,
 				60A4CC81251D73F3001BEA84 /* ContentView.swift in Sources */,
