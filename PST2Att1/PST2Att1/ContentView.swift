@@ -15,7 +15,7 @@ struct ContentView: View {
     @State var yes = String(y)
     @State var tempo: Double =  120
     @State var g1: Bool = false
-    @State var g2: Bool = false
+    @State var g2: Bool = true
     @State var g3: Bool = false
     
     var body: some View {
