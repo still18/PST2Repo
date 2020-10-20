@@ -8,8 +8,10 @@
 
 import SwiftUI
 import UIKit
+import MediaPlayer
 
-   var y : Int = 0
+var y : Int = 0
+let musicP = MPMusicPlayerApplicationController.applicationQueuePlayer
 
 struct ContentView: View {
     @State var yes = String(y)
@@ -90,6 +92,15 @@ struct ContentView: View {
             
             VStack(){
                 Text("Audio recorder options here")
+            }
+            
+            VStack() {
+            Text("Test audio playback here then move to other page")
+            
+            Button(action: {musicP.setQueue(with: .songs())
+                musicP.play()}) {
+            Text("Button")
+            }
             }
             
             

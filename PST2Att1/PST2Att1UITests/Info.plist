@@ -18,5 +18,7 @@
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>This product needs apple media player</string>
 </dict>
 </plist>
