@@ -90,18 +90,33 @@ struct ContentView: View {
                 Spacer().frame(height: 20)
             }
             
-            VStack(){
-                Text("Audio recorder options here")
-            }
-            
             VStack() {
-            Text("Test audio playback here then move to other page")
-            
-            Button(action: {musicP.setQueue(with: .songs())
+                Text("Playback Controls").font(.headline)
+                Spacer().frame(height: 10)
+                Button(action: {musicP.setQueue(with: .songs())
                 musicP.play()}) {
-            Text("Button")
+                    Text("Start")
             }
+                Spacer().frame(height: 10)
+                Button(action: {
+                    musicP.pause()
+                }) {
+                    Text("Pause")
+                }
+                Spacer().frame(height: 10)
+                Button(action: {musicP.play()}) {
+                    Text("Resume")
+                }
             }
+                Spacer().frame(height: 10)
+                Button(action: {musicP.skipToNextItem()}) {
+                Text("Next song")
+            }
+                Spacer().frame(height: 20)
+                Button(action: musicP.skipToPreviousItem) {
+                Text("Previous Song")
+            }
+            
             
             
             //This stuff below is just test stuff, it's not important to our intial project it's just for reference
