@@ -19,6 +19,10 @@ struct ContentView: View {
     @State var g1: Bool = false
     @State var g2: Bool = true
     @State var g3: Bool = false
+    @State var g4: Bool = true
+    @State var g5: Bool = false
+    @State var g6: Bool = true
+    @State var g7: Bool = false
     
     var body: some View {
         ScrollView {
@@ -30,11 +34,11 @@ struct ContentView: View {
             Text("What are you doing right now?")
                 .font(.headline)
                 Picker(selection: .constant(3), label: Text("")) {
-            Text("Option 1").tag(1)
-            Text("Option 2").tag(2)
-            Text("Option 3").tag(3)
-            Text("Option 4").tag(4)
-            Text("Option 5").tag(5)
+            Text("Working out").tag(1)
+            Text("Car ride").tag(2)
+            Text("Studying").tag(3)
+            Text("Small group").tag(4)
+            Text("Large group").tag(5)
             }
             //.padding(-90.0)
             .frame(width: -200.0, height: 180)
@@ -48,19 +52,19 @@ struct ContentView: View {
                 .font(.headline)
                 
                Toggle(isOn: $g1) {
-               Text("Genre1")
+               Text("Rock")
                }
                .padding(.horizontal)
                .frame(width: -250.0, height: 30)
                 
                Toggle(isOn: $g2) {
-                Text("Genre2")
+                Text("Jazz")
                 }
                 .padding(.horizontal)
                 .frame(width: -250.0, height: 30)
                 
                 Toggle(isOn: $g3) {
-                Text("Genre3")
+                Text("Techno")
                 }
                 .padding(.horizontal)
                 .frame(width: -250.0, height: 30)
@@ -68,40 +72,88 @@ struct ContentView: View {
             
             VStack() {
             Spacer().frame(height: 25)
-            Text("What sort of mood are you in").font(.headline)
-                Picker(selection: .constant(33), label: Text("")) {
-            Text("Option 1").tag(11)
-            Text("Option 2").tag(22)
-            Text("Option 3").tag(33)
-            Text("Option 4").tag(44)
-            Text("Option 5").tag(55)
-            }
+            Text("What sort of mood are you in?").font(.headline)
+                HStack() {
+                    Text("Aggressive")
+                    Toggle(isOn: $g4) {
+                        
+                    }.padding(.horizontal).frame(width: 50)
+                    Text("  Relaxed    ")
+                }
+                HStack() {
+                    Text("   Electronic")
+                    Toggle(isOn: $g5) {
+                        
+                    }.padding(.horizontal).frame(width: 50)
+                    Text("  Accoustic  ")
+                }
+                HStack() {
+                    Text("     Happy")
+                    Toggle(isOn: $g6) {
+                        
+                    }.padding(.horizontal).frame(width: 50)
+                    Text("   Sad        ")
+                }
+                HStack() {
+                    Text("      Big Party")
+                    Toggle(isOn: $g7) {
+                        
+                    }.padding(.horizontal).frame(width: 50)
+                    Text("  Small Group")
+                }
             //.padding(-90.0)
-            .frame(width: -200.0, height: 180)
-            Spacer().frame(height: 0)
-            }
- 
-            
-            VStack(){
-                Text("Select your speed/tempo").font(.headline)
-                Slider(value: $tempo, in: 40...200)
-                    .frame(width: -300)
-                Text("\(Int(tempo))")
-                Spacer().frame(height: 20)
+            //.frame(width: -200.0, height: 180)
+            Spacer().frame(height: 20)
+                VStack(){
+                    Text("Select your speed/tempo").font(.headline)
+                    Slider(value: $tempo, in: 40...200)
+                        .frame(width: -300)
+                    Text("\(Int(tempo))")
+                    Spacer().frame(height: 20)
+                }
             }
             
-            VStack(){
-                Text("Audio recorder options here")
-            }
             
             VStack() {
-            Text("Test audio playback here then move to other page")
-            
-            Button(action: {musicP.setQueue(with: .songs())
+                Text("Playback Controls").font(.headline)
+                Spacer().frame(height: 10)
+                Button(action: {musicP.setQueue(with: .songs())
                 musicP.play()}) {
-            Text("Button")
+                    Text("Start")
             }
+                Spacer().frame(height: 10)
+                Button(action: {
+                    musicP.pause()
+                }) {
+                    Text("Pause")
+                }
+                Spacer().frame(height: 10)
+                Button(action: {musicP.play()}) {
+                    Text("Resume")
+                }
             }
+                Spacer().frame(height: 10)
+                Button(action: {musicP.skipToNextItem()
+                    musicP.play()
+                }) {
+                Text("Next song")
+            }
+                Spacer().frame(height: 10)
+            Button(action: {musicP.skipToPreviousItem()
+                musicP.play()
+            }
+                      ) {
+                Text("Previous Song")
+            }
+            
+            
+            //Eli's recorder stuff goes in this object
+            VStack() {
+               
+                
+                
+            }
+            
             
             
             //This stuff below is just test stuff, it's not important to our intial project it's just for reference
@@ -129,6 +181,16 @@ struct ContentView: View {
             }
         
              */
+            /*
+            
+            Picker(selection: .constant(33), label: Text("")) {
+        Text("Option 1").tag(11)
+        Text("Option 2").tag(22)
+        Text("Option 3").tag(33)
+        Text("Option 4").tag(44)
+        Text("Option 5").tag(55)
+        }*/
+            
         }
         }
     }
