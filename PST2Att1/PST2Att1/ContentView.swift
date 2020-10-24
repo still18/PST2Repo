@@ -104,16 +104,15 @@ struct ContentView: View {
             //.padding(-90.0)
             //.frame(width: -200.0, height: 180)
             Spacer().frame(height: 20)
+                VStack(){
+                    Text("Select your speed/tempo").font(.headline)
+                    Slider(value: $tempo, in: 40...200)
+                        .frame(width: -300)
+                    Text("\(Int(tempo))")
+                    Spacer().frame(height: 20)
+                }
             }
- 
             
-            VStack(){
-                Text("Select your speed/tempo").font(.headline)
-                Slider(value: $tempo, in: 40...200)
-                    .frame(width: -300)
-                Text("\(Int(tempo))")
-                Spacer().frame(height: 20)
-            }
             
             VStack() {
                 Text("Playback Controls").font(.headline)
@@ -145,6 +144,14 @@ struct ContentView: View {
             }
                       ) {
                 Text("Previous Song")
+            }
+            
+            
+            //Eli's recorder stuff goes in this object
+            VStack() {
+               
+                
+                
             }
             
             
