@@ -9,11 +9,13 @@
 import SwiftUI
 import Foundation
 import UIKit
+
 import AVKit
 import MediaPlayer
 
 var y : Int = 0
 let musicP = MPMusicPlayerApplicationController.applicationQueuePlayer
+
 
 
 
@@ -27,6 +29,7 @@ struct ContentView: View {
     @State var g5: Bool = false
     @State var g6: Bool = true
     @State var g7: Bool = false
+
     @State var record = false
     // creating instance for recroding...
     @State var session : AVAudioSession!
@@ -34,6 +37,7 @@ struct ContentView: View {
     @State var alert = false
     // Fetch Audios...
     @State var audios : [URL] = []
+
     
     var body: some View {
         ScrollView {
@@ -41,6 +45,7 @@ struct ContentView: View {
             
          //   Spacer().frame(height: 50)
             
+
            // VStack() {
            // Text("What are you doing right now?")
            //     .font(.headline)
@@ -51,6 +56,7 @@ struct ContentView: View {
           //  Text("Small group").tag(4)
           //  Text("Large group").tag(5)
           //  }
+
             //.padding(-90.0)
           //  .frame(width: -200.0, height: 180)
           //  Spacer().frame(height: 0)
@@ -62,6 +68,7 @@ struct ContentView: View {
            // Text("Select the genres you'd like to hear")
              //   .font(.headline)
                 
+
            //    Toggle(isOn: $g1) {
             //   Text("Rock")
             //   }
@@ -294,6 +301,7 @@ struct ContentView: View {
             
             
             
+            
             //This stuff below is just test stuff, it's not important to our intial project it's just for reference
             /*
             VStack(/*alignment: .leading*/) {
@@ -329,9 +337,11 @@ struct ContentView: View {
         Text("Option 5").tag(55)
         }*/
             
+
        // }
         //}
     //}
+
     
 //}
 

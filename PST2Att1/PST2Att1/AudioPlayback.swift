@@ -7,10 +7,26 @@
 //
 
 import SwiftUI
+import MediaPlayer
+
+
+    //let musicP = MPMusicPlayerApplicationController.applicationQueuePlayer
+    
+
+
 
 struct AudioPlayback: View {
+    
     var body: some View {
+        
+        VStack() {
         Text("Test audio playback here then move to other page")
+        
+        //Button(action: {musicP.setQueue(with: .songs())
+            //musicP.play()}) {
+        //Text("Button")
+        //}
+        }
         
     }
 }
@@ -20,3 +36,5 @@ struct AudioPlayback_Previews: PreviewProvider {
         AudioPlayback()
     }
 }
+
+
