@@ -41,129 +41,135 @@ struct ContentView: View {
     
     var body: some View {
         ScrollView {
-       // VStack() {
+        VStack() {
             
-         //   Spacer().frame(height: 50)
+           Spacer().frame(height: 50)
             
 
-           // VStack() {
-           // Text("What are you doing right now?")
-           //     .font(.headline)
-           //     Picker(selection: .constant(3), label: Text("")) {
-          //  Text("Working out").tag(1)
-          //  Text("Car ride").tag(2)
-          //  Text("Studying").tag(3)
-          //  Text("Small group").tag(4)
-          //  Text("Large group").tag(5)
-          //  }
-
-            //.padding(-90.0)
-          //  .frame(width: -200.0, height: 180)
-          //  Spacer().frame(height: 0)
-          //  }
+            VStack() {
+            Text("What are you doing right now?")
+                .font(.headline)
+                Picker(selection: .constant(3), label: Text("")) {
+            Text("Working out").tag(1)
+            Text("Car ride").tag(2)
+            Text("Studying").tag(3)
+            Text("Small group").tag(4)
+            Text("Large group").tag(5)
+            }
+            .padding(-90.0)
+            .frame(width: -200.0, height: 180)
+            Spacer().frame(height: 0)
+            }
  
             
             
-           // VStack() {
-           // Text("Select the genres you'd like to hear")
-             //   .font(.headline)
+            VStack() {
+            Text("Select the genres you'd like to hear")
+                .font(.headline)
                 
 
-           //    Toggle(isOn: $g1) {
-            //   Text("Rock")
-            //   }
-             //  .padding(.horizontal)
-             //  .frame(width: -250.0, height: 30)
+               Toggle(isOn: $g1) {
+               Text("Rock")
+               }
+               .padding(.horizontal)
+               .frame(width: 250, height: 30)
                 
-           //    Toggle(isOn: $g2) {
-            //    Text("Jazz")
-            //    }
-            //    .padding(.horizontal)
-            //    .frame(width: -250.0, height: 30)
+               Toggle(isOn: $g2) {
+                Text("Jazz")
+                }
+                .padding(.horizontal)
+                .frame(width: 250, height: 30)
                 
-             //   Toggle(isOn: $g3) {
-             //   Text("Techno")
-              //  }
-              //  .padding(.horizontal)
-               // .frame(width: -250.0, height: 30)
-           // }
+                Toggle(isOn: $g3) {
+                Text("Techno")
+                }
+                .padding(.horizontal)
+                .frame(width: 250, height: 30)
+            }
+        }
             
-        //    VStack() {
-        //    Spacer().frame(height: 25)
-          //  Text("What sort of mood are you in?").font(.headline)
-       //         HStack() {
-            //        Text("Aggressive")
-              //      Toggle(isOn : $g4){ Text("a")
+        VStack() {
+            Spacer().frame(height: 25)
+            Text("What sort of mood are you in?").font(.headline)
+                HStack() {
+                    Text("Aggressive")
+                    Toggle(isOn : $g4){ Text("a")
                         
-                    //}.padding(.horizontal).frame(width: 50)
-        //            Text("  Relaxed    ")
-             //   }
-          //      HStack() {
-            //        Text("   Electronic")
-              //      Toggle(isOn: $g5) { Text("b")
+                }.padding(.horizontal).frame(width: 50)
+                    Text("  Relaxed    ")
+                }
+                HStack() {
+                    Text("   Electronic")
+                    Toggle(isOn: $g5) { Text("b")
                         
-                    //}.padding(.horizontal).frame(width: 50)
-                   // Text("  Accoustic  ")
-               // }
-               // HStack() {
-                //    Text("     Happy")
-                 //   Toggle(isOn: $g6) { Text("c")
+                    }.padding(.horizontal).frame(width: 50)
+                    Text("  Accoustic  ")
+                }
+                HStack() {
+                    Text("     Happy")
+                    Toggle(isOn: $g6) { Text("c")
                         
-                    //}.padding(.horizontal).frame(width: 50)
-                   // Text("   Sad        ")
-                //}
-                //HStack() {
-                  //  Text("      Big Party")
-                    //Toggle(isOn: $g7) { Text("d")
+                    }.padding(.horizontal).frame(width: 50)
+                    Text("   Sad        ")
+                }
+                HStack() {
+                    Text("      Big Party")
+                    Toggle(isOn: $g7) { Text("d")
                         
-                    //}.padding(.horizontal).frame(width: 50)
-                    //Text("  Small Group")
-                //}
+                    }.padding(.horizontal).frame(width: 50)
+                    Text("  Small Group")
+                }
             //.padding(-90.0)
-            //.frame(width: -200.0, height: 180)
-           // Spacer().frame(height: 20)
-              //  VStack(){
-                //    Text("Select your speed/tempo").font(.headline)
-                  //  Slider(value: $tempo, in: 40...200)
-                    //    .frame(width: -300)
-               //     Text("\(Int(tempo))")
-                   // Spacer().frame(height: 20)
-                //}
-            //}
+            //.frame(width: 200.0, height: 180)
+                Spacer().frame(height: 30)
+                VStack(){
+                    
+                    Text("Select your speed/tempo").font(.headline)
+                    
+                    Slider(value: $tempo, in: 40...200).frame(width: 300)
+                    Text("\(Int(tempo))")
+                    Spacer().frame(height: 20)
+                    
+                }
+            }
+        
             
+        VStack() {
+            VStack() {
+                Text("Playback Controls").font(.headline)
+                Spacer().frame(height: 10)
+                Button(action: {musicP.setQueue(with: .songs())
+                            musicP.play()}) {
+                    Text("Start")
+            }
+                VStack() {
+                Spacer().frame(height: 10)
+                Button(action: {
+                    musicP.pause()
+                }) {
+                    Text("Pause")
+                }
+                Spacer().frame(height: 10)
+                Button(action: {musicP.play()}) {
+                    Text("Resume")
+                }
             
-         //   VStack() {
-           //     Text("Playback Controls").font(.headline)
-             //   Spacer().frame(height: 10)
-               // Button(action: {musicP.setQueue(with: .songs())
-                //musicP.play()}) {
-             //       Text("Start")
-           // }
-             //   Spacer().frame(height: 10)
-               // Button(action: {
-                //    musicP.pause()
-               // }) {
-                //    Text("Pause")
-                //}
-                //Spacer().frame(height: 10)
-                //Button(action: {musicP.play()}) {
-                  //  Text("Resume")
-                //}
-            //}
-              //  Spacer().frame(height: 10)
-               // Button(action: {musicP.skipToNextItem()
-                 //   musicP.play()
-                //}) {
-                //Text("Next song")
-           // }
-             //   Spacer().frame(height: 10)
-           // Button(action: {musicP.skipToPreviousItem()
-               // musicP.play()
-            //}
-              //        ) {
-                //Text("Previous Song")
-            //}
+                Spacer().frame(height: 10)
+                Button(action: {musicP.skipToNextItem()
+                    musicP.play()
+                }) {
+                Text("Next song")
+            }
+                Spacer().frame(height: 10)
+                    Button(action: {musicP.skipToPreviousItem()
+                        musicP.play()
+                    }){
+                        Text("Previous Song")
+                    }
+            }
+            }
             
+        }
             //Eli's recorder stuff goes in this object
             VStack() {
                 

@@ -20,5 +20,7 @@
 	<string>1</string>
 	<key>NSAppleMusicUsageDescription</key>
 	<string>This app requires apple media player</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This app requires microphone access</string>
 </dict>
 </plist>

@@ -40,6 +40,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6001B6B32551077D0066D6EF /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		605DB45B2536A27B004274D5 /* AudioPlayback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayback.swift; sourceTree = "<group>"; };
 		605DB45E2536A88D004274D5 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		609F6A9C2544DBD1003FA70D /* Recorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recorder.swift; sourceTree = "<group>"; };
@@ -90,6 +91,7 @@
 		605DB45D2536A88D004274D5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				6001B6B32551077D0066D6EF /* AVFoundation.framework */,
 				605DB45E2536A88D004274D5 /* MediaPlayer.framework */,
 			);
 			name = Frameworks;
