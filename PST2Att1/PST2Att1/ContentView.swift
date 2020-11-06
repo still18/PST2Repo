@@ -56,8 +56,8 @@ struct ContentView: View {
             Text("Small group").tag(4)
             Text("Large group").tag(5)
             }
-            .padding(-90.0)
-            .frame(width: -200.0, height: 180)
+            .padding(90.0)
+            .frame(width: 200.0, height: 180)
             Spacer().frame(height: 0)
             }
  
@@ -146,6 +146,13 @@ struct ContentView: View {
                 Spacer().frame(height: 10)
                 Button(action: {
                     musicP.pause()
+                    let mediaItems = MPMediaQuery.songs().items
+                    print("Songs:")
+                    //print(mediaItems)
+                    for case let unit in mediaItems! {
+                        let saved = unit.title
+                        print(saved)
+                    }
                 }) {
                     Text("Pause")
                 }
