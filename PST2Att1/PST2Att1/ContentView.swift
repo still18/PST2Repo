@@ -240,6 +240,15 @@ struct ContentView: View {
             }
             }
             
+            VStack() {
+                Text("Accelerometer values: ")
+                //Put live updating values here
+                HStack() {
+                    
+                    
+                }
+            }
+            
         }
             //Eli's recorder stuff goes in this object
             VStack() {
@@ -250,35 +259,27 @@ struct ContentView: View {
                 Text(i.relativeString)
                 }
             
-                
                                 Button(action: {
-
+                                    
                                     // Now going to record audio...
-                                    
                                     // Intialization...
-                                    
                                     // Were going to store audio in document directory...
                                     
                                     do{
                                         
                                         if self.record{
-                                            
                                             // Already Started Recording means stopping and saving...
-                                            
                                             self.recorder.stop()
                                             self.record.toggle()
                                             // updating data for every record...
                                             self.getAudios()
-                                    
                                             return
                                         }
                                         
                                         let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-                                        
                                         // same file name...
                                         // it is updating based on audio count...
                                         let filName = url.appendingPathComponent("recording.m4a")
-                                        
                                         let settings = [
                                         
                                             AVFormatIDKey : Int(kAudioFormatMPEG4AAC),
@@ -294,19 +295,15 @@ struct ContentView: View {
                                         
                                     }
                                     catch{
-                                        
                                         print(error.localizedDescription)
                                     }
-                                    
                                 
                                 }) {
                                     
                                     ZStack{
-                                        
                                         Circle()
                                             .fill(Color.red)
                                             .frame(width: 70, height: 70)
-                                        
                                         if self.record{
                                             
                                             Circle()
@@ -320,65 +317,59 @@ struct ContentView: View {
                             .navigationBarTitle("Record Audio")
                         }
                         .alert(isPresented: self.$alert, content: {
-                            
                             Alert(title: Text("Error"), message: Text("Enable Acess"))
                         })
                         .onAppear {
                             
                             do{
-                                
                                 // Intializing...
-                                
                                 self.session = AVAudioSession.sharedInstance()
                                 try self.session.setCategory(.playAndRecord)
-                                
                                 // requesting permission
                                 // for this we require microphone usage description in info.plist...
                                 self.session.requestRecordPermission { (status) in
-                                    
                                     if !status{
-                                        
                                         // error msg...
                                         self.alert.toggle()
                                     }
                                     else{
-                                        
                                         // if permission granted means fetching all data...
-                                        
                                         self.getAudios()
                                     }
                                 }
                                 
-                                
                             }
                             catch{
-                                
                                 print(error.localizedDescription)
                             }
                         }
                     }
+    
                     
                     func getAudios(){
                         
                         do{
                             
                             let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-                            
+                            print("url:")
+                            print(url)
                             // fetch all data from document directory...
-                            
                             let result = try FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: nil, options: .producesRelativePathURLs)
+                            print("result:")
+                            print(result)
+                            
+                            let urlString = try String(contentsOf: url)
+                            let testThing = try FileManager.default.contentsOfDirectory(atPath: urlString)
+                            print("test result: ")
+                            print(testThing)
                             
                             // updated means remove all old data..
-                            
                             self.audios.removeAll()
-                            
                             for i in result{
-                                
                                 self.audios.append(i)
                             }
                         }
                         catch{
-                            
                             print(error.localizedDescription)
                         }
                     }
