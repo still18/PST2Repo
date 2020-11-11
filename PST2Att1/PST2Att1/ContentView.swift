@@ -9,15 +9,79 @@
 import SwiftUI
 import Foundation
 import UIKit
-
+import AVFoundation
+import Accelerate
 import AVKit
 import MediaPlayer
 
 var y : Int = 0
+
+func getAudioSamples(forResource: String,
+                            withExtension: String) -> (naturalTimeScale: CMTimeScale,
+                                                       data: [Float])? {
+    
+    guard let path = Bundle.main.url(forResource: forResource,
+                                     withExtension: withExtension) else {
+                                        return nil
+    }
+    
+    let asset = AVAsset(url: path.absoluteURL)
+    
+    guard
+        let reader = try? AVAssetReader(asset: asset),
+        let track = asset.tracks.first else {
+            return nil
+    }
+    
+    let outputSettings: [String: Int] = [
+        AVFormatIDKey: Int(kAudioFormatLinearPCM),
+        AVNumberOfChannelsKey: 1,
+        AVLinearPCMIsBigEndianKey: 0,
+        AVLinearPCMIsFloatKey: 1,
+        AVLinearPCMBitDepthKey: 32,
+        AVLinearPCMIsNonInterleaved: 1
+    ]
+    
+    let output = AVAssetReaderTrackOutput(track: track,
+                                          outputSettings: outputSettings)
+
+    reader.add(output)
+    reader.startReading()
+    
+    var samplesData = [Float]()
+    
+    while reader.status == .reading {
+        if
+            let sampleBuffer = output.copyNextSampleBuffer(),
+            let dataBuffer = CMSampleBufferGetDataBuffer(sampleBuffer) {
+            
+                let bufferLength = CMBlockBufferGetDataLength(dataBuffer)
+            
+                var data = [Float](repeating: 0,
+                                   count: bufferLength / 4)
+                CMBlockBufferCopyDataBytes(dataBuffer,
+                                           atOffset: 0,
+                                           dataLength: bufferLength,
+                                           destination: &data)
+            
+                samplesData.append(contentsOf: data)
+        }
+    }
+
+    return (naturalTimeScale: track.naturalTimeScale,
+            data: samplesData)
+}
 let musicP = MPMusicPlayerApplicationController.applicationQueuePlayer
 
+let samples: (naturalTimeScale: Int32, data: [Float]) = {
+    guard let samples = getAudioSamples(
+            forResource: "recording",
+            withExtension: "m4a") else {
+            fatalError("Unable to parse the audio resource.")
+    }
 
-
+    return samples
+}()
 
 struct ContentView: View {
     @State var yes = String(y)
@@ -179,6 +243,13 @@ struct ContentView: View {
         }
             //Eli's recorder stuff goes in this object
             VStack() {
+                List(self.audios,id: \.self){i in
+                
+                // printing only file name...
+                
+                Text(i.relativeString)
+                }
+            
                 
                                 Button(action: {
 
@@ -198,6 +269,7 @@ struct ContentView: View {
                                             self.record.toggle()
                                             // updating data for every record...
                                             self.getAudios()
+                                    
                                             return
                                         }
                                         
@@ -219,13 +291,14 @@ struct ContentView: View {
                                         self.recorder = try AVAudioRecorder(url: filName, settings: settings)
                                         self.recorder.record()
                                         self.record.toggle()
+                                        
                                     }
                                     catch{
                                         
                                         print(error.localizedDescription)
                                     }
                                     
-                                    
+                                
                                 }) {
                                     
                                     ZStack{
@@ -237,7 +310,7 @@ struct ContentView: View {
                                         if self.record{
                                             
                                             Circle()
-                                                .stroke(Color.white, lineWidth: 6)
+                                                .stroke(Color.black, lineWidth: 6)
                                                 .frame(width: 85, height: 85)
                                         }
                                     }
@@ -310,7 +383,7 @@ struct ContentView: View {
                         }
                     }
                 }
-            
+
             
             
             

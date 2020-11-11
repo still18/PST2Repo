@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		56D824B325550421004B404C /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56D824B225550421004B404C /* Accelerate.framework */; };
 		605DB45C2536A27B004274D5 /* AudioPlayback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605DB45B2536A27B004274D5 /* AudioPlayback.swift */; };
 		605DB45F2536A88D004274D5 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 605DB45E2536A88D004274D5 /* MediaPlayer.framework */; };
-		609F6A9D2544DBD1003FA70D /* Recorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609F6A9C2544DBD1003FA70D /* Recorder.swift */; };
 		60A4CC7D251D73F3001BEA84 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A4CC7C251D73F3001BEA84 /* AppDelegate.swift */; };
 		60A4CC7F251D73F3001BEA84 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A4CC7E251D73F3001BEA84 /* SceneDelegate.swift */; };
 		60A4CC81251D73F3001BEA84 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A4CC80251D73F3001BEA84 /* ContentView.swift */; };
@@ -40,10 +40,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		56D824B225550421004B404C /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		6001B6B32551077D0066D6EF /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		605DB45B2536A27B004274D5 /* AudioPlayback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayback.swift; sourceTree = "<group>"; };
 		605DB45E2536A88D004274D5 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
-		609F6A9C2544DBD1003FA70D /* Recorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recorder.swift; sourceTree = "<group>"; };
 		60A4CC79251D73F3001BEA84 /* PST2Att1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PST2Att1.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		60A4CC7C251D73F3001BEA84 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		60A4CC7E251D73F3001BEA84 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -67,6 +67,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				56D824B325550421004B404C /* Accelerate.framework in Frameworks */,
 				605DB45F2536A88D004274D5 /* MediaPlayer.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -91,6 +92,7 @@
 		605DB45D2536A88D004274D5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				56D824B225550421004B404C /* Accelerate.framework */,
 				6001B6B32551077D0066D6EF /* AVFoundation.framework */,
 				605DB45E2536A88D004274D5 /* MediaPlayer.framework */,
 			);
@@ -124,7 +126,6 @@
 				60A4CC7C251D73F3001BEA84 /* AppDelegate.swift */,
 				60A4CC7E251D73F3001BEA84 /* SceneDelegate.swift */,
 				60A4CC80251D73F3001BEA84 /* ContentView.swift */,
-				609F6A9C2544DBD1003FA70D /* Recorder.swift */,
 				605DB45B2536A27B004274D5 /* AudioPlayback.swift */,
 				60E88CB6252FEE4B0006607E /* SwiftUIView.swift */,
 				60F8C54E251D90FC00D825FB /* Circ.swift */,
@@ -225,7 +226,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1130;
-				LastUpgradeCheck = 1130;
+				LastUpgradeCheck = 1210;
 				ORGANIZATIONNAME = SeanTillman;
 				TargetAttributes = {
 					60A4CC78251D73F3001BEA84 = {
@@ -298,7 +299,6 @@
 				60A4CC7F251D73F3001BEA84 /* SceneDelegate.swift in Sources */,
 				60F8C54F251D90FC00D825FB /* Circ.swift in Sources */,
 				60A4CC81251D73F3001BEA84 /* ContentView.swift in Sources */,
-				609F6A9D2544DBD1003FA70D /* Recorder.swift in Sources */,
 				60E88CB7252FEE4B0006607E /* SwiftUIView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -372,6 +372,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -432,6 +433,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
