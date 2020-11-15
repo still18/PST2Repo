@@ -25,29 +25,6 @@ class MyData: ObservableObject {
 class ValueAccess {
     
     @ObservedObject var testData = MyData()
-    var speNum: Int = 5
-
-    func printTest() {
-        print("Hello eeeeediot!")
-        print("the magic number today is", speNum)
-        print("Here's the read in tempo:", xTempo)
-        print("And the Bools are lookin like:", xBool)
-    }
-    
-    func musicPrinter() {
-        //Song names
-        let mediaItems = MPMediaQuery.songs().items
-        //print(mediaItems)
-        print("\nSong info...")
-        for case let unit in mediaItems! {
-            let song = unit.title
-            let artist = unit.artist
-            //let album = unit.albumTitle
-            let pID = unit.persistentID
-            print("The song is -", song!, "- by:", artist!, "with ID#:", pID)
-        }
-        print("\nAnd finally..")
-    }
     
     func startDefaultQueue() {
         musicP.setQueue(with: .songs())
@@ -82,6 +59,20 @@ class ValueAccess {
         let tempSongs = MPMediaItemCollection.init(items: [oneItem, twoItem])
         musicP.setQueue(with: tempSongs)
         musicP.prepareToPlay()
+    }
+    
+    func musicPrinter() {
+        //Song names
+        let mediaItems = MPMediaQuery.songs().items
+        //print(mediaItems)
+        print("\nSong info...")
+        for case let unit in mediaItems! {
+            let song = unit.title
+            let artist = unit.artist
+            //let album = unit.albumTitle
+            //let pID = unit.persistentID
+            print("The song is -", song!, "- by:", artist!)
+        }
     }
     
 }

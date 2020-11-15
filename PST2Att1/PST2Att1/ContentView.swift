@@ -18,10 +18,13 @@ let VA = ValueAccess()
 
 var xTempo: Double = -1
 var xBool: [Bool] = [false, false, false, false, false, false, false]
+var happenActions = ["Working out", "Car ride", "Studying", "In a small group", "In a large group"]
+var xSelection: Int = -1
 
 struct ContentView: View {
     //@ObservedObject var data = MyData()
     @State var tempo2 : Double = 120
+    
     @State var g1: Bool = false
     @State var g2: Bool = true
     @State var g3: Bool = false
@@ -29,6 +32,20 @@ struct ContentView: View {
     @State var g5: Bool = false
     @State var g6: Bool = true
     @State var g7: Bool = false
+    
+    @State var selectedAction = 2
+    
+    func exportTempo() {
+        xTempo = tempo2
+    }
+    func exportBools() {
+        xBool = [g1, g2, g3, g4, g5, g6, g7]
+    }
+    func exportSelection() {
+        //This is only the index, not the actual choice
+        //To get actual choice (String), acess happenActions at index xSelection
+        xSelection = selectedAction
+    }
 
     //Audio vars, ignore for now
     /*
@@ -40,34 +57,33 @@ struct ContentView: View {
     // Fetch Audios...
     @State var audios : [URL] = []
     */
-
+    
     
     var body: some View {
-        ScrollView {
+        ScrollView(showsIndicators: false) {
             VStack() {
                 
                Spacer().frame(height: 50)
 
+                //Actions
                 VStack() {
                 Text("What are you doing right now?")
                     .font(.headline)
-                    Picker(selection: .constant(3), label: Text("")) {
-                Text("Working out").tag(1)
-                Text("Car ride").tag(2)
-                Text("Studying").tag(3)
-                Text("Small group").tag(4)
-                Text("Large group").tag(5)
+                Picker(selection: $selectedAction, label: Text("")) {
+                    ForEach(0 ..< happenActions.count) {
+                        Text(happenActions[$0])
+                    }
                 }
                 .padding(90.0)
                 .frame(width: 200.0, height: 180)
                 Spacer().frame(height: 0)
                 }
                 
+                //Genres
                 VStack() {
                 Text("Select the genres you'd like to hear")
                     .font(.headline)
                     
-
                    Toggle(isOn: $g1) {
                    Text("Rock")
                    }
@@ -86,91 +102,87 @@ struct ContentView: View {
                     .padding(.horizontal)
                     .frame(width: 250, height: 30)
                 }
-            }
+                }
                 
-            VStack() {
-                Spacer().frame(height: 25)
-                Text("What sort of mood are you in?").font(.headline)
-                    HStack() {
-                        Text("Aggressive")
-                        Toggle(isOn : $g4){ Text("a")
+                //Moods
+                VStack() {
+                    Spacer().frame(height: 25)
+                    Text("What sort of mood are you in?").font(.headline)
+                        HStack() {
+                            Text("Aggressive")
+                            Toggle(isOn : $g4){ Text("a")
                             
-                    }.padding(.horizontal).frame(width: 50)
-                        Text("  Relaxed    ")
-                    }
-                    HStack() {
-                        Text("   Electronic")
-                        Toggle(isOn: $g5) { Text("b")
+                            }.padding(.horizontal).frame(width: 50)
+                            Text("  Relaxed    ")
+                        }
+                        HStack() {
+                            Text("   Electronic")
+                            Toggle(isOn: $g5) { Text("b")
                             
-                        }.padding(.horizontal).frame(width: 50)
-                        Text("  Accoustic  ")
-                    }
-                    HStack() {
-                        Text("     Happy")
-                        Toggle(isOn: $g6) { Text("c")
+                            }.padding(.horizontal).frame(width: 50)
+                            Text("  Accoustic  ")
+                        }
+                        HStack() {
+                            Text("     Happy")
+                            Toggle(isOn: $g6) { Text("c")
                             
-                        }.padding(.horizontal).frame(width: 50)
-                        Text("   Sad        ")
-                    }
-                    HStack() {
-                        Text("      Big Party")
-                        Toggle(isOn: $g7) { Text("d")
+                            }.padding(.horizontal).frame(width: 50)
+                            Text("   Sad        ")
+                        }
+                        HStack() {
+                            Text("      Big Party")
+                            Toggle(isOn: $g7) { Text("d")
                             
-                        }.padding(.horizontal).frame(width: 50)
-                        Text("  Small Group")
-                    }
-                //.padding(-90.0)
-                //.frame(width: 200.0, height: 180)
-                    Spacer().frame(height: 30)
-                    VStack(){
+                            }.padding(.horizontal).frame(width: 50)
+                            Text("  Small Group")
+                        }
+                    
+                //Tempo
+                Spacer().frame(height: 30)
+                VStack(){
                         
                         Text("Select your speed/tempo").font(.headline)
-                        
                         Slider(value: $tempo2, in: 40...200).frame(width: 300)
                         Text("\(Int(tempo2))")
                         Spacer().frame(height: 20)
                         
-                    }
+                }
                 
+                //Update
                 VStack() {
-                    Spacer().frame(height: 20)
-                    Text("The amazing button of destiny...")
-                    //Put live updating values here
+                    Text("Press here to update your choices").font(.headline)
+                    Spacer().frame(height: 15)
                     HStack() {
                         
                         Button(action: {
                             //"Export" values to global variables
-                            xTempo = tempo2
-                            xBool = [g1, g2, g3, g4, g5, g6, g7]
+                            self.exportTempo()
+                            self.exportBools()
+                            self.exportSelection()
                             
-                            //This will print out all current values, if possible
+                            //Below prints out all current values
+                            //Just for the console, no affect on the app
                             print("\n\nValues of current measureable elements:")
                             
-                            //TODO: Selector value
+                            //Selector value
+                            print("\nCurrent seleceted action...")
+                            let cac = happenActions[xSelection]
+                            //cac uses global index with the possible options
+                            print(cac)
                             
                             //Booleans
                             print("\nBoolean values...")
-                            print(g1)
-                            print(g2)
-                            print(g3)
-                            print(g4)
-                            print(g5)
-                            print(g6)
-                            print(g7)
+                            print(xBool)
                             
                             //Tempo
                             print("\nSelected tempo...")
-                            print(tempo2)
+                            print(xTempo)
                             
                             //Songs
                             VA.musicPrinter()
                             
-                            //Test stuff
-                            VA.printTest()
-                            VA.expirPlay()
-                            
                         }) {
-                            Text("ya yeet")
+                            Text("Update!")
                         }
                      
                     }
