@@ -47,7 +47,6 @@ struct ContentView: View {
             VStack() {
                 
                Spacer().frame(height: 50)
-                
 
                 VStack() {
                 Text("What are you doing right now?")
@@ -63,8 +62,6 @@ struct ContentView: View {
                 .frame(width: 200.0, height: 180)
                 Spacer().frame(height: 0)
                 }
-
-                
                 
                 VStack() {
                 Text("Select the genres you'd like to hear")
@@ -134,43 +131,6 @@ struct ContentView: View {
                         Spacer().frame(height: 20)
                         
                     }
-        
-            
-                
-            VStack() {
-                VStack() {
-                    Text("Playback Controls").font(.headline)
-                    Spacer().frame(height: 10)
-                    Button(action: {musicP.setQueue(with: .songs())
-                                musicP.play()}) {
-                        Text("Start")
-                }
-                    VStack() {
-                    Spacer().frame(height: 10)
-                    Button(action: {
-                        musicP.pause()
-                    }) {
-                        Text("Pause")
-                    }
-                    Spacer().frame(height: 10)
-                    Button(action: {musicP.play()}) {
-                        Text("Resume")
-                    }
-                
-                    Spacer().frame(height: 10)
-                    Button(action: {musicP.skipToNextItem()
-                        musicP.play()
-                    }) {
-                    Text("Next song")
-                }
-                    Spacer().frame(height: 10)
-                        Button(action: {musicP.skipToPreviousItem()
-                            musicP.play()
-                        }){
-                            Text("Previous Song")
-                        }
-                }
-                }
                 
                 VStack() {
                     Spacer().frame(height: 20)
@@ -202,19 +162,12 @@ struct ContentView: View {
                             print("\nSelected tempo...")
                             print(tempo2)
                             
-                            //Song names
-                            let mediaItems = MPMediaQuery.songs().items
-                            //print(mediaItems)
-                            print("\nSong info...")
-                            for case let unit in mediaItems! {
-                                let song = unit.title
-                                let artist = unit.artist
-                                //let album = unit.albumTitle
-                                //let pID = unit.persistentID
-                                print("The song is -", song!, "- by:", artist!)
-                            }
-                            print("\nAnd finally..")
+                            //Songs
+                            VA.musicPrinter()
+                            
+                            //Test stuff
                             VA.printTest()
+                            VA.expirPlay()
                             
                         }) {
                             Text("ya yeet")
@@ -231,7 +184,7 @@ struct ContentView: View {
 
     }
 }
-}
+
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {

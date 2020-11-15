@@ -28,12 +28,60 @@ class ValueAccess {
     var speNum: Int = 5
 
     func printTest() {
-        
         print("Hello eeeeediot!")
         print("the magic number today is", speNum)
         print("Here's the read in tempo:", xTempo)
         print("And the Bools are lookin like:", xBool)
-        
+    }
+    
+    func musicPrinter() {
+        //Song names
+        let mediaItems = MPMediaQuery.songs().items
+        //print(mediaItems)
+        print("\nSong info...")
+        for case let unit in mediaItems! {
+            let song = unit.title
+            let artist = unit.artist
+            //let album = unit.albumTitle
+            let pID = unit.persistentID
+            print("The song is -", song!, "- by:", artist!, "with ID#:", pID)
+        }
+        print("\nAnd finally..")
+    }
+    
+    func startDefaultQueue() {
+        musicP.setQueue(with: .songs())
+        musicP.prepareToPlay()
+        musicP.play()
+    }
+    
+    func pauseMusic() {
+        musicP.pause()
+    }
+    
+    func playMusic() {
+        musicP.play()
+    }
+    
+    func skipToPrevSong() {
+        musicP.skipToPreviousItem()
+        musicP.play()
+    }
+    
+    func skipToNextSong() {
+        musicP.skipToNextItem()
+        musicP.play()
+    }
+    
+    func expirPlay() {
+        let mediaItems = MPMediaQuery.songs().items
+        let oneItem = mediaItems![2]
+        print("\nThe selected song is:", oneItem.title!)
+        let twoItem = mediaItems![6]
+        print("The next selected song is:", twoItem.title!)
+        let tempSongs = MPMediaItemCollection.init(items: [oneItem, twoItem])
+        musicP.setQueue(with: tempSongs)
+        musicP.prepareToPlay()
     }
     
 }

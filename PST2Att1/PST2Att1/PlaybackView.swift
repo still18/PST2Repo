@@ -10,7 +10,39 @@ import SwiftUI
 
 struct PlaybackView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+            VStack() {
+                Text("Playback Controls").font(.headline)
+                VStack {
+                Spacer().frame(height: 10)
+                Button(action: {VA.startDefaultQueue()}) {
+                    Text("Start")
+                }
+                }
+                VStack {
+                Spacer().frame(height: 10)
+                Button(action: {VA.pauseMusic()}) {
+                    Text("Pause")
+                }
+                }
+                VStack {
+                Spacer().frame(height: 10)
+                Button(action: {VA.playMusic()}) {
+                    Text("Resume")
+                }
+                }
+                VStack {
+                Spacer().frame(height: 10)
+                Button(action: {VA.skipToNextSong()}) {
+                    Text("Next song")
+                }
+                }
+                VStack {
+                Spacer().frame(height: 10)
+                Button(action: {VA.skipToPrevSong()}) {
+                    Text("Previous Song")
+                    }
+                }
+        }
     }
 }
 

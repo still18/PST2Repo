@@ -14,17 +14,17 @@ struct AppView: View {
         TabView {
             
             ContentView().tabItem {
-                Image(systemName: "list.dash")
+                Image(systemName: "list.bullet")
                 Text("Presets")
             }
             
             PlaybackView().tabItem {
-                Image(systemName: "square.and.pencil")
+                Image(systemName: "music.note")
                 Text("Playback")
             }
             
             AboutView().tabItem {
-                Image(systemName: "list.dash")
+                Image(systemName: "info.circle")
                 Text("About")
             }
             
