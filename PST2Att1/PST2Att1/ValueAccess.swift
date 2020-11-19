@@ -28,6 +28,7 @@ class ValueAccess {
     
     @ObservedObject var testData = MyData()
     
+    
     func startDefaultQueue() {
         musicP.setQueue(with: .songs())
         musicP.prepareToPlay()
@@ -77,20 +78,7 @@ class ValueAccess {
         }
     }
     
-    /*
-    func Accel(){
-        motion.accelerometerUpdateInterval = 0.5
-        motion.startAccelerometerUpdates(to: OperationQueue.current!)
-        { _,_ in (data, error);, in
-            if let myData = data {
-                self.accelx = myData.acceleration.x
-                self.accely = myData.acceleration.y
-                self.accelz = myData.acceleration.z
-            }
-        }
-        func magaccel(){
-            self.accelmag = sqrt((pow(self.accelx, 2)+(pow(self.accely, 2)+(pow(self.accelz, 2)))
-        }*/
+    
     
 }
 

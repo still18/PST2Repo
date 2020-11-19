@@ -20,6 +20,8 @@ var xTempo: Double = -1
 var xBool: [Bool] = [false, false, false, false, false, false, false]
 var happenActions = ["Working out", "Car ride", "Studying", "In a small group", "In a large group"]
 var xSelection: Int = -1
+var xAcd: Double = 0.0
+var hasStarted: Bool = false
 
 struct ContentView: View {
     //@ObservedObject var data = MyData()
@@ -33,6 +35,11 @@ struct ContentView: View {
     @State var g6: Bool = true
     @State var g7: Bool = false
     
+    @State var accelx : Double = 0.0
+    @State var accely : Double = 0.0
+    @State var accelz : Double = 0.0
+    @State var accelmag : Double = 0.0
+    
     @State var selectedAction = 2
     
     func exportTempo() {
@@ -45,6 +52,31 @@ struct ContentView: View {
         //This is only the index, not the actual choice
         //To get actual choice (String), acess happenActions at index xSelection
         xSelection = selectedAction
+    }
+    
+    
+    func startAccel() {
+        motion.accelerometerUpdateInterval = 0.5
+        motion.startAccelerometerUpdates(to: OperationQueue.current!) { (data, error) in
+            if let mD = data {
+                self.accelx = mD.acceleration.x
+                self.accely = mD.acceleration.y
+                self.accelz = mD.acceleration.z
+            }
+        }
+    }
+    
+    func magaccel() {
+        self.accelmag = sqrt(pow(self.accelx, 2) + pow(self.accely, 2) + pow(self.accelz, 2))
+    }
+    
+    func exportAccelMag() {
+        if !hasStarted {
+            hasStarted = true
+            startAccel()
+        }
+        //xAcd = self.accelmag
+        print(self.accelmag)
     }
 
     //Audio vars, ignore for now
@@ -181,12 +213,18 @@ struct ContentView: View {
                             //Songs
                             VA.musicPrinter()
                             
+                            //Test stuff again
+                            
+                            
                         }) {
                             Text("Update!")
                         }
                      
                     }
                     Spacer().frame(height: 20)
+                    Text("\(Int(accelx))")
+                    Text("\(Int(accely))")
+                    Text("\(Int(accelz))")
                 }
               
                 
