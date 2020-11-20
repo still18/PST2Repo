@@ -21,6 +21,8 @@
 	<key>NSAppleMusicUsageDescription</key>
 	<string>This product needs apple media player</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>This app need microphone access</string>
+	<string>This app needs microphone access</string>
+	<key>NSMotionUsageDescription</key>
+	<string>This app needs motion controls</string>
 </dict>
 </plist>

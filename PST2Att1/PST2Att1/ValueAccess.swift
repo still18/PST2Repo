@@ -13,18 +13,22 @@ import AVFoundation
 import Accelerate
 import AVKit
 import MediaPlayer
+import CoreMotion
 
 //Permanent/Changing vars go here or at top of other classes
 let musicP = MPMusicPlayerApplicationController.applicationQueuePlayer
 class MyData: ObservableObject {
     @Published var tempo : Double = 120
 }
+var motion = CMMotionManager()
+var motion3 = CMDeviceMotion()
 
 
 //Functions and temporary vars go here
 class ValueAccess {
     
     @ObservedObject var testData = MyData()
+    
     
     func startDefaultQueue() {
         musicP.setQueue(with: .songs())
@@ -74,6 +78,8 @@ class ValueAccess {
             print("The song is -", song!, "- by:", artist!)
         }
     }
+    
+    
     
 }
 

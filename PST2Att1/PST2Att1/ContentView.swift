@@ -20,6 +20,8 @@ var xTempo: Double = -1
 var xBool: [Bool] = [false, false, false, false, false, false, false]
 var happenActions = ["Working out", "Car ride", "Studying", "In a small group", "In a large group"]
 var xSelection: Int = -1
+var xAcd: Double = 0.0
+var hasStarted: Bool = false
 
 struct ContentView: View {
     //@ObservedObject var data = MyData()
@@ -33,6 +35,11 @@ struct ContentView: View {
     @State var g6: Bool = true
     @State var g7: Bool = false
     
+    @State var accelx : Double = 0.0
+    @State var accely : Double = 0.0
+    @State var accelz : Double = 0.0
+    @State var accelmag : Double = 0.0
+    
     @State var selectedAction = 2
     
     func exportTempo() {
@@ -45,6 +52,30 @@ struct ContentView: View {
         //This is only the index, not the actual choice
         //To get actual choice (String), acess happenActions at index xSelection
         xSelection = selectedAction
+    }
+    
+    
+    func startAccel() {
+        motion.deviceMotionUpdateInterval = 0.5
+        motion.startDeviceMotionUpdates(to: OperationQueue.current!) { (data, error) in
+            if let mD = data {
+                self.accelx = mD.userAcceleration.x
+                self.accely = mD.userAcceleration.y
+                self.accelz = mD.userAcceleration.z
+                self.accelmag = sqrt(pow(self.accelx, 2) + pow(self.accely, 2) + pow(self.accelz, 2))
+                xAcd = self.accelmag
+            }
+        }
+    }
+    
+    func exportAccelMag() {
+        //if !hasStarted {
+            //hasStarted = true
+            //startAccel()
+        //}
+        //xAcd = self.accelmag
+        //startAccel()
+        //print(self.accelmag)
     }
 
     //Audio vars, ignore for now
@@ -159,6 +190,7 @@ struct ContentView: View {
                             self.exportTempo()
                             self.exportBools()
                             self.exportSelection()
+                            self.startAccel()
                             
                             //Below prints out all current values
                             //Just for the console, no affect on the app
@@ -181,12 +213,19 @@ struct ContentView: View {
                             //Songs
                             VA.musicPrinter()
                             
+                            //Test stuff again
+                            
+                            
                         }) {
                             Text("Update!")
                         }
                      
                     }
                     Spacer().frame(height: 20)
+                    Text("\(Double(accelx))")
+                    Text("\(Double(accely))")
+                    Text("\(Double(accelz))")
+                    Text("\(Double(accelmag))").font(.headline)
                 }
               
                 
