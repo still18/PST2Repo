@@ -21,6 +21,7 @@ class MyData: ObservableObject {
     @Published var tempo : Double = 120
 }
 var motion = CMMotionManager()
+var motion3 = CMDeviceMotion()
 
 
 //Functions and temporary vars go here

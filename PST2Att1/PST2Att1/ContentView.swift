@@ -56,27 +56,26 @@ struct ContentView: View {
     
     
     func startAccel() {
-        motion.accelerometerUpdateInterval = 0.5
-        motion.startAccelerometerUpdates(to: OperationQueue.current!) { (data, error) in
+        motion.deviceMotionUpdateInterval = 0.5
+        motion.startDeviceMotionUpdates(to: OperationQueue.current!) { (data, error) in
             if let mD = data {
-                self.accelx = mD.acceleration.x
-                self.accely = mD.acceleration.y
-                self.accelz = mD.acceleration.z
+                self.accelx = mD.userAcceleration.x
+                self.accely = mD.userAcceleration.y
+                self.accelz = mD.userAcceleration.z
+                self.accelmag = sqrt(pow(self.accelx, 2) + pow(self.accely, 2) + pow(self.accelz, 2))
+                xAcd = self.accelmag
             }
         }
     }
     
-    func magaccel() {
-        self.accelmag = sqrt(pow(self.accelx, 2) + pow(self.accely, 2) + pow(self.accelz, 2))
-    }
-    
     func exportAccelMag() {
-        if !hasStarted {
-            hasStarted = true
-            startAccel()
-        }
+        //if !hasStarted {
+            //hasStarted = true
+            //startAccel()
+        //}
         //xAcd = self.accelmag
-        print(self.accelmag)
+        //startAccel()
+        //print(self.accelmag)
     }
 
     //Audio vars, ignore for now
@@ -191,6 +190,7 @@ struct ContentView: View {
                             self.exportTempo()
                             self.exportBools()
                             self.exportSelection()
+                            self.startAccel()
                             
                             //Below prints out all current values
                             //Just for the console, no affect on the app
@@ -222,9 +222,10 @@ struct ContentView: View {
                      
                     }
                     Spacer().frame(height: 20)
-                    Text("\(Int(accelx))")
-                    Text("\(Int(accely))")
-                    Text("\(Int(accelz))")
+                    Text("\(Double(accelx))")
+                    Text("\(Double(accely))")
+                    Text("\(Double(accelz))")
+                    Text("\(Double(accelmag))").font(.headline)
                 }
               
                 
