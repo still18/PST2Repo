@@ -21,7 +21,6 @@ var xBool: [Bool] = [false, false, false, false, false, false, false]
 var happenActions = ["Working out", "Car ride", "Studying", "In a small group", "In a large group"]
 var xSelection: Int = -1
 var xAcd: Double = 0.0
-var hasStarted: Bool = false
 
 struct ContentView: View {
     //@ObservedObject var data = MyData()
@@ -30,6 +29,7 @@ struct ContentView: View {
     @State var g1: Bool = false
     @State var g2: Bool = true
     @State var g3: Bool = false
+    
     @State var g4: Bool = true
     @State var g5: Bool = false
     @State var g6: Bool = true
@@ -68,14 +68,14 @@ struct ContentView: View {
         }
     }
     
+    func stopAccel() {
+        motion.stopDeviceMotionUpdates()
+    }
+    
     func exportAccelMag() {
-        //if !hasStarted {
-            //hasStarted = true
-            //startAccel()
-        //}
-        //xAcd = self.accelmag
-        //startAccel()
-        //print(self.accelmag)
+        //we will need to make a 5 second timer
+        //it will read in ~10 values
+        //then take the max and "export" to xAcd
     }
 
     //Audio vars, ignore for now
@@ -191,6 +191,8 @@ struct ContentView: View {
                             self.exportBools()
                             self.exportSelection()
                             self.startAccel()
+                            self.exportAccelMag()
+                            self.stopAccel()
                             
                             //Below prints out all current values
                             //Just for the console, no affect on the app
