@@ -54,8 +54,11 @@ struct ContentView: View {
         xSelection = selectedAction
     }
     
+    func getMag() -> Double {
+        return self.accelmag
+    }
     
-    func startAccel() {
+    func exportAccelMag() {
         motion.deviceMotionUpdateInterval = 0.5
         motion.startDeviceMotionUpdates(to: OperationQueue.current!) { (data, error) in
             if let mD = data {
@@ -66,16 +69,23 @@ struct ContentView: View {
                 xAcd = self.accelmag
             }
         }
-    }
-    
-    func stopAccel() {
-        motion.stopDeviceMotionUpdates()
-    }
-    
-    func exportAccelMag() {
         //we will need to make a 5 second timer
         //it will read in ~10 values
         //then take the max and "export" to xAcd
+        var poss = [-99.9]
+        let bruh = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true) { timer in
+            poss.append(getMag())
+            print(getMag())
+        }
+        let _ = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: false) { timer in
+            xAcd = poss.max()!
+            print("Max value in last 5 seconds:")
+            print(xAcd)
+            motion.stopDeviceMotionUpdates()
+            bruh.invalidate()
+        }
+        
+        //print("?")
     }
 
     //Audio vars, ignore for now
@@ -190,9 +200,9 @@ struct ContentView: View {
                             self.exportTempo()
                             self.exportBools()
                             self.exportSelection()
-                            self.startAccel()
+                            //self.startAccel()
                             self.exportAccelMag()
-                            self.stopAccel()
+                            //self.stopAccel()
                             
                             //Below prints out all current values
                             //Just for the console, no affect on the app
@@ -426,3 +436,24 @@ Text("Option 5").tag(55)
                 }
             }
         }*/
+
+
+
+/*
+ func startAccel() {
+     motion.deviceMotionUpdateInterval = 0.5
+     motion.startDeviceMotionUpdates(to: OperationQueue.current!) { (data, error) in
+         if let mD = data {
+             self.accelx = mD.userAcceleration.x
+             self.accely = mD.userAcceleration.y
+             self.accelz = mD.userAcceleration.z
+             self.accelmag = sqrt(pow(self.accelx, 2) + pow(self.accely, 2) + pow(self.accelz, 2))
+             xAcd = self.accelmag
+         }
+     }
+ }
+ 
+ func stopAccel() {
+     motion.stopDeviceMotionUpdates()
+ }
+ */
