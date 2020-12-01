@@ -18,7 +18,7 @@ let VA = ValueAccess()
 
 var xTempo: Double = -1
 var xBool: [Bool] = [false, false, false, false, false, false, false]
-var happenActions = ["Working out", "Car ride", "Studying", "In a small group", "In a large group"]
+var happenActions = ["Working Out", "Car Ride", "Studying", "Small Group", "Large Group"]
 var xSelection: Int = -1
 var xAcd: Double = 0.0
 
@@ -69,36 +69,20 @@ struct ContentView: View {
                 xAcd = self.accelmag
             }
         }
-        //we will need to make a 5 second timer
-        //it will read in ~10 values
-        //then take the max and "export" to xAcd
         var poss = [-99.9]
         let bruh = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true) { timer in
             poss.append(getMag())
             print(getMag())
         }
-        let _ = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: false) { timer in
+        let _ = Timer.scheduledTimer(withTimeInterval: 15.0, repeats: false) { timer in
             xAcd = poss.max()!
-            print("Max value in last 5 seconds:")
+            print("Max value in last 5 seconds:")//delete this and following 2 lines as well
             print(xAcd)
+            accelmag = xAcd
             motion.stopDeviceMotionUpdates()
             bruh.invalidate()
         }
-        
-        //print("?")
     }
-
-    //Audio vars, ignore for now
-    /*
-    @State var record = false
-    // creating instance for recroding...
-    @State var session : AVAudioSession!
-    @State var recorder : AVAudioRecorder!
-    @State var alert = false
-    // Fetch Audios...
-    @State var audios : [URL] = []
-    */
-    
     
     var body: some View {
         ScrollView(showsIndicators: false) {
