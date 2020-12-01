@@ -1,0 +1,56 @@
+mood_list = []
+for i in range(0, len(mbid_dict)):
+    
+    a = moving_pictures[i]               #Load Individual Song Info
+    song_info = mbid_dict[a][1]
+    #print(song_info)
+    song_high = song_info["highlevel"]   #High-Level Data
+
+    song_acoustic = song_high["mood_acoustic"]["probability"]  #song_mood is probability of a mood
+    acoustic_value =song_high["mood_acoustic"]["value"]        #acoustic_value is value of mood: acoustic vs not_acoustic
+
+    song_electronic = song_high["mood_electronic"]["probability"]
+    electronic_value = song_high["mood_electronic"]["value"]
+
+    song_happy = song_high["mood_happy"]["probability"]
+    happy_value = song_high["mood_happy"]["value"]
+
+    song_aggressive = song_high["mood_aggressive"]["probability"]
+    aggressive_value = song_high["mood_aggressive"]["value"]
+
+    song_party = song_high["mood_party"]["probability"]
+    party_value = song_high["mood_party"]["value"]
+
+    song_sad = song_high["mood_sad"]["probability"]
+    sad_value = song_high["mood_sad"]["value"]
+
+    song_relaxed = song_high["mood_relaxed"]["probability"]
+    relaxed_value = song_high["mood_relaxed"]["value"]
+
+    #Sort all song moods
+    mood_info = [relaxed_value, song_relaxed*100, aggressive_value, song_aggressive*100, acoustic_value, song_acoustic*100, electronic_value, song_electronic*100, happy_value, song_happy*100, sad_value, song_sad*100, party_value, song_party*100]
+    mood_list = mood_list + [mood_info]
+
+
+songIDs = ["3ed46a79-c541-496b-9508-c04ecf9fb206", "0266c4c2-5e64-402e-8e26-5cd46b64e8c9", "9057d88d-f03a-4c0f-b55f-e0d5b901e288", "71fcdceb-aa1f-49bb-9d5d-86319bb182d1", "cb837d0c-5115-479d-ac0e-ab1650fe9078", "7d9354b2-f8d8-4b7c-be95-1acb97771d2b", "336acc6e-0f4a-4dae-8427-fe48aaa8984c"]
+bpms = []
+rmslist = []
+titlelist = []
+artistlist = []
+albumlist = []
+trackdate = []
+tracknum = []
+genre = []
+for i in range(0,len(songIDs)):
+    bpm = mbid_dict[songIDs[i]][0]["rhythm"]["bpm"]
+    bpms = bpms + [bpm]
+    rmsMean = mbid_dict[songIDs[i]][0]['lowlevel']['spectral_rms']['mean']
+    rmslist = rmslist + [rmsMean]
+    titlelist = titlelist + [mbid_dict[songIDs[i]][1]["metadata"]["tags"]["title"][0]]
+    artistlist = artistlist + [mbid_dict[songIDs[i]][1]["metadata"]["tags"]["artist"][0]]
+    albumlist = albumlist + [mbid_dict[songIDs[i]][1]["metadata"]["tags"]["album"][0]]
+    trackdate = trackdate + [mbid_dict[songIDs[i]][1]["metadata"]["tags"]["date"][0]]
+    tracknum = tracknum + [mbid_dict[songIDs[i]][1]["metadata"]["tags"]["tracknumber"][0]]
+    genre = genre + [mbid_dict[songIDs[i]][1]["highlevel"]["genre_rosamerica"]["value"]]
+valuelist = [mood_list, bpms, rmslist, titlelist, artistlist, albumlist, trackdate, tracknum, genre]
+valuelist
