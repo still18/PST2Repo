@@ -79,30 +79,48 @@ class ValueAccess {
         }
     }
     
-    func assignActivities() -> [String] {
+    func assignActivity() -> String {
+        return happenActions[xSelection]
+    }
+    
+    func assignGenres() -> [String] {
+        
+        var chosen = [String]()
+        if (xBool[0]) {chosen.append("cla")}
+        if (xBool[1]) {chosen.append("dan")}
+        if (xBool[2]) {chosen.append("hip")}
+        if (xBool[3]) {chosen.append("jaz")}
+        if (xBool[4]) {chosen.append("pop")}
+        if (xBool[5]) {chosen.append("rhy")}
+        if (xBool[6]) {chosen.append("roc")}
+        if (xBool[7]) {chosen.append("spe")}
+        return chosen
+    }
+    
+    func assignMoods() -> [String] {
         var choice1 = ""
-        if (!xBool[3]) {
+        if (!xBool[8]) {
             choice1 = "Aggressive"
         } else {
             choice1 = "Relaxed"
         }
         
         var choice2 = ""
-        if (!xBool[4]) {
+        if (!xBool[9]) {
             choice2 = "Electronic"
         } else {
             choice2 = "Accoustic"
         }
         
         var choice3 = ""
-        if (!xBool[5]) {
+        if (!xBool[10]) {
             choice3 = "Happy"
         } else {
             choice3 = "Sad"
         }
         
         var choice4 = ""
-        if (!xBool[6]) {
+        if (!xBool[11]) {
             choice4 = "Party"
         } else {
             choice4 = "Chill"
@@ -334,14 +352,18 @@ class ValueAccess {
     
     func calculate() -> [[Any]] {
         
-        var moodSettings = assignActivities()
+        var moodSettings = assignMoods()
         var inputTempo = xTempo
-        var rmsValue = xAcd
+        var rmsInput = xAcd
+        var inputGenre = assignGenres()
+        var activity = assignActivity()
         
         //Temporary test values
         moodSettings = ["Aggressive", "Electronic", "Sad", "Chill"]
         inputTempo = 140.0
-        rmsValue = 0.25
+        rmsInput = 0.25
+        inputGenre = ["jaz", "pop"]
+        activity = "Studying"
         
         // Determine the file name
         let filename = "songs.txt"
@@ -390,6 +412,7 @@ class ValueAccess {
         //let albums = mbid_array[5] as! [Any]
         //let dates = mbid_array[6] as! [Any]
         //let tracknum = mbid_array[7] as! [Any]
+        let genre = mbid_array[8] as! [String]
         
         var mood_array: [Any] = []
         for i in 0...num_songs-1 {
@@ -487,11 +510,44 @@ class ValueAccess {
             let b = drms[i] //as! Double
             nrms = nrms+[(b-drms.min()!)/(drms.max()!-drms.min()!)]
         }
+        
+        let inputstart: Double = 0.0    //Maps RMS Calculation based on activity
+        let inputend: Double = 1.0
+        var outputstart: Double = 0.0
+        var outputend: Double = 1.0
+        if activity == "Working Out" {
+            outputstart = 0.8
+            outputend = 1.0
+        } else if activity == "Large Group" {
+            outputstart = 0.6
+            outputend = 0.8
+        } else if activity == "Car Ride" {
+            outputstart = 0.4
+            outputend = 0.6
+        } else if activity == "Small Group" {
+            outputstart = 0.2
+            outputend = 0.4
+        } else if activity == "Studying" {
+            outputstart = 0.0
+            outputend = 0.2
+        }
+        
+        
+        var rmsValue: Double = outputstart + ((outputend - outputstart) / (inputend - inputstart)) * (rmsInput - inputstart)
         var rmssort: [String] = []
         for i in titles.indices {
             if temposort.contains(titles[i] as! String) {
                 if (nrms[i]) >= (rmsValue - 0.25) && (nrms[i]) <= (rmsValue + 0.25) {
                     rmssort = rmssort + [titles[i] as! String]
+                }
+            }
+        }
+        
+        var genresort: [String] = []  //Picks songs based on genre input
+        for i in titles.indices {
+            if rmssort.contains(titles[i] as! String) {
+                if inputGenre.contains(genre[i]) {
+                    genresort = genresort + [titles[i] as! String]
                 }
             }
         }
