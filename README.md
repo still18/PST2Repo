@@ -12,8 +12,8 @@ playback music based on the mood of the user and accelerometer data.
 - Will Smith, wsmith324@gatech.edu
 
 ## GitHub Files
--PST2Att1 (This is the Swift File, and where the majority of the code is for the app)
--pyacoustid-1.2.0 (Allows for the metadata of a song to be sent to the app)
+- PST2Att1 (This is the Swift File, and where the majority of the code is for the app)
+- pyacoustid-1.2.0 (Allows for the metadata of a song to be sent to the app)
 
 ## Download Instructions
 
