@@ -9,39 +9,50 @@
 import SwiftUI
 
 struct PlaybackView: View {
+    
+    @State var playerPaused = true
+    
     var body: some View {
             VStack() {
                 Text("Playback Controls").font(.headline)
                 VStack {
                 Spacer().frame(height: 10)
-                Button(action: {VA.startDefaultQueue()}) {
+                Button(action: {VA.startDefaultQueue()
+                    self.playerPaused.toggle()
+                }) {
                     Text("Start")
                 }
                 }
-                VStack {
-                Spacer().frame(height: 10)
-                Button(action: {VA.pauseMusic()}) {
-                    Text("Pause")
-                }
-                }
-                VStack {
-                Spacer().frame(height: 10)
-                Button(action: {VA.playMusic()}) {
-                    Text("Resume")
-                }
-                }
-                VStack {
-                Spacer().frame(height: 10)
-                Button(action: {VA.skipToNextSong()}) {
-                    Text("Next song")
-                }
-                }
-                VStack {
-                Spacer().frame(height: 10)
-                Button(action: {VA.skipToPrevSong()}) {
-                    Text("Previous Song")
+                HStack() {
+                    VStack {
+                    Spacer().frame(height: 10)
+                    Button(action: {VA.skipToPrevSong()}) {
+                        Image(systemName: "backward.end.fill").resizable().frame(width: 50, height: 50)
                     }
-                }
+                    }
+                    Spacer().frame(width: 40)
+                    VStack {
+                    Spacer().frame(height: 10)
+                    Button(action: {
+                        self.playerPaused.toggle()
+                        if self.playerPaused {
+                            VA.pauseMusic()
+                        } else {
+                            VA.playMusic()
+                        }
+                    }) {
+                        Image(systemName: playerPaused ? "play.fill" : "pause.fill").resizable().frame(width: 50, height: 50)
+                    }
+                    }
+                    Spacer().frame(width: 40)
+                    VStack {
+                    Spacer().frame(height: 10)
+                    Button(action: {VA.skipToNextSong()}) {
+                        Image(systemName: "forward.end.fill").resizable().frame(width: 50, height: 50)
+                    }
+                    }
+                    
+                }.frame(minWidth: 100)
         }
     }
 }
