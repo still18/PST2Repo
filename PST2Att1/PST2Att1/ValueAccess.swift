@@ -8,10 +8,10 @@
 
 import SwiftUI
 import Foundation
-import UIKit
-import AVFoundation
-import Accelerate
-import AVKit
+//import UIKit
+//import AVFoundation
+//import Accelerate
+//import AVKit
 import MediaPlayer
 import CoreMotion
 
