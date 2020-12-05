@@ -1,0 +1,486 @@
+import Foundation
+
+
+var moodSettings = ["Aggressive", "Electronic", "Sad", "Party"]   //Input Moods
+var inputTempo = 100.0                                            //Input Tempo
+var rmsInput = 0.75                                               //RMS Reading
+var inputGenre = ["pop", "rhy", "spe", "jaz"]                                  //Genre Input
+var activity = "Car Ride"                                      //Activity Input
+
+// Determine the file name
+let filename = "song_info.txt"
+
+// Read the contents of the specified file
+let contents = try! String(contentsOfFile: filename)
+
+// Split the file into separate lines
+let lines = contents.components(separatedBy: "\n")
+
+let line: [Any] = Array(String(lines[0]))
+
+
+var mbid_array: [Any] = [] //Reads lines of file into array with necessary format adjustments
+for i in lines.indices {
+    let stringArray = lines[i]
+                                                                                            //CHANGED BELOW
+    let stringArrayCleaned = stringArray.description.replacingOccurrences(of: "\"", with: "").replacingOccurrences(of: ">", with: "").replacingOccurrences(of: "\r", with: "").replacingOccurrences(of: "\n", with: "").replacingOccurrences(of: "[", with: "").replacingOccurrences(of: "]", with: "")
+
+    //let stringArrayCleaned1: [Any] = stringArrayCleaned 
+    let b = Array(stringArrayCleaned)
+
+    var h: String = ""
+
+    for i in b.indices {
+        h = h + String(b[i])
+    }
+
+    var sarray = h.components(separatedBy: CharacterSet(charactersIn: "<#")) //CHANGED
+    for i in sarray.indices {
+        sarray[i] = sarray[i].replacingOccurrences(of: "\'", with: "")
+    }
+    //print(sarray)
+    var news: [Any] = []
+    for i in sarray.indices {
+        if sarray[i] != "" {
+            news = news + [sarray[i]]
+        }
+    }
+    mbid_array = mbid_array + [news]
+}
+
+var moods = mbid_array[0] as! [String] //Sorts song data by parts  //ALL OF THESE CHANGED TO [STRING]
+var tempo = mbid_array[1] as! [String]
+var rms = mbid_array[2] as! [String]
+var titles = mbid_array[3] as! [String]
+var artists = mbid_array[4] as! [String]  
+var albums = mbid_array[5] as! [String]
+var dates = mbid_array[6] as! [String]
+var tracknum = mbid_array[7] as! [String]
+var genre = mbid_array[8] as! [String]
+
+moods.removeAll { $0 == ", " } //NEW STUFF
+tempo.removeAll { $0 == ", " }
+rms.removeAll { $0 == ", " }
+titles.removeAll { $0 == ", " }
+artists.removeAll { $0 == ", " }
+albums.removeAll { $0 == ", " }
+dates.removeAll { $0 == ", " }
+tracknum.removeAll { $0 == ", " }
+genre.removeAll { $0 == ", " }
+
+
+let f = mbid_array[1] as! [Any]
+let num_songs: Int = f.count
+
+var mood_array: [Any] = []  //Sorts mood values by song (array for each song)
+for i in 0...num_songs-1 {
+    mood_array = mood_array + [Array(moods[(i*14)..<(i*14+14)])]
+}
+
+var songsAggressive: [Any] = [] //Sorts each songs mood values into each mood type
+var songsElectronic: [Any] = []
+var songsHappy: [Any] = []
+var songsParty: [Any] = []
+for i in mood_array.indices {
+    songsAggressive = songsAggressive + (mood_array[i] as! [Any])[0..<4]
+    songsElectronic = songsElectronic + (mood_array[i] as! [Any])[4..<8]
+    songsHappy = songsHappy + (mood_array[i] as! [Any])[8..<12]
+    songsParty = songsParty + (mood_array[i] as! [Any])[12..<14]
+}
+
+for i in songsAggressive.indices {  //Converts numerical values from string to double for each mood type
+    if i % 2 != 0 {
+        let b: Any = songsAggressive[i]
+        songsAggressive[i] = (b as! NSString).doubleValue
+    }
+}
+for i in songsElectronic.indices {
+    if i % 2 != 0 {
+        let b: Any = songsElectronic[i]
+        songsElectronic[i] = (b as! NSString).doubleValue
+    }
+}
+for i in songsHappy.indices {
+    if i % 2 != 0 {
+        let b: Any = songsHappy[i]
+        songsHappy[i] = (b as! NSString).doubleValue
+    }
+}
+for i in songsParty.indices {
+    if i % 2 != 0 {
+        let b: Any = songsParty[i]
+        songsParty[i] = (b as! NSString).doubleValue
+    }
+}
+
+
+func sortMoodAggressive(array: [Any]) -> [Any] {   //Sorts mood values and outputs normalized range for mood data from 0-1
+    var out: [Any] = []
+    for num in array.indices {
+        
+        if "\(array[num])" == "relaxed" {
+            if "\(array[num+2])" == "aggressive" {
+                if array[num+1] as! Double > array[num+3] as! Double {
+                    out = out + ["relaxed", array[num+1]]
+                } else {
+                    out = out + ["aggressive", array[num+3]]
+                }
+            }
+        }
+        if "\(array[num])" == "relaxed" {
+            if "\(array[num+2])" == "not_aggressive" {
+                if array[num+1] as! Double > array[num+3] as! Double {
+                    out = out + ["relaxed", array[num+1]]
+                } else {
+                    out = out + ["relaxed", array[num+3]]
+                }
+            }
+        }
+        if "\(array[num])" == "not_relaxed" {
+            if "\(array[num+2])" == "aggressive" {
+                if array[num+1] as! Double > array[num+3] as! Double {
+                    out = out + ["aggressive", array[num+1]]
+                } else {
+                    out = out + ["aggressive", array[num+3]]
+                }
+            }
+        }
+        if "\(array[num])" == "not_relaxed" {
+            if "\(array[num+2])" == "not_aggressive" {
+                if array[num+1] as! Double > array[num+3] as! Double {
+                    out = out + ["aggressive", array[num+1]]
+                } else {
+                    out = out + ["relaxed", array[num+3]]
+                }
+            }
+        }
+    }
+    for i in out.indices {
+        if "\(out[i])" == "relaxed" {
+            out[i] = "aggressive"
+            var b = out[i+1] as! Double
+            out[i+1] = 100.0 - b
+        }
+    }
+    var num: [Double] = []
+    var new1: [Double] = []
+    for i in out.indices {
+        if "\(type(of: out[i]))" != "String" {
+            num = num + [out[i] as! Double]
+        }
+    }
+    for i in out.indices {   
+        if "\(type(of: out[i]))" != "String" {
+            var b = out[i] as! Double
+            new1 = new1+[(b-num.min()!)/(num.max()!-num.min()!)]  
+        }
+    }
+    let Aggressive = new1
+    return Aggressive
+}
+
+func sortMoodElectronic(array: [Any]) -> [Any] {
+    var out: [Any] = []
+    for num in array.indices {
+        
+        if "\(array[num])" == "acoustic" {
+            if "\(array[num+2])" == "electronic" {
+                if array[num+1] as! Double > array[num+3] as! Double {
+                    out = out + ["acoustic", array[num+1]]
+                } else {
+                    out = out + ["electronic", array[num+3]]
+                }
+            }
+        }
+        if "\(array[num])" == "acoustic" {
+            if "\(array[num+2])" == "not_electronic" {
+                if array[num+1] as! Double > array[num+3] as! Double {
+                    out = out + ["acoustic", array[num+1]]
+                } else {
+                    out = out + ["acoustic", array[num+3]]
+                }
+            }
+        }
+        if "\(array[num])" == "not_acoustic" {
+            if "\(array[num+2])" == "electronic" {
+                if array[num+1] as! Double > array[num+3] as! Double {
+                    out = out + ["electronic", array[num+1]]
+                } else {
+                    out = out + ["electronic", array[num+3]]
+                }
+            }
+        }
+        if "\(array[num])" == "not_acoustic" {
+            if "\(array[num+2])" == "not_electronic" {
+                if array[num+1] as! Double > array[num+3] as! Double {
+                    out = out + ["electronic", array[num+1]]
+                } else {
+                    out = out + ["acoustic", array[num+3]]
+                }
+            }
+        }
+    }
+    for i in out.indices {
+        if "\(out[i])" == "acoustic" {
+            out[i] = "electronic"
+            var b = out[i+1] as! Double
+            out[i+1] = 100.0 - b
+        }
+    }
+    var num: [Double] = []
+    var new1: [Double] = []
+    for i in out.indices {
+        if "\(type(of: out[i]))" != "String" {
+            num = num + [out[i] as! Double]
+        }
+    }
+    for i in out.indices {   
+        if "\(type(of: out[i]))" != "String" {
+            var b = out[i] as! Double
+            new1 = new1+[(b-num.min()!)/(num.max()!-num.min()!)]  
+        }
+    }
+    let Electronic = new1
+    return Electronic
+}
+
+func sortMoodHappy(array: [Any]) -> [Any] {
+    var out: [Any] = []
+    for num in array.indices {
+        
+        if "\(array[num])" == "happy" {
+            if "\(array[num+2])" == "sad" {
+                if array[num+1] as! Double > array[num+3] as! Double {
+                    out = out + ["happy", array[num+1]]
+                } else {
+                    out = out + ["sad", array[num+3]]
+                }
+            }
+        }
+        if "\(array[num])" == "happy" {
+            if "\(array[num+2])" == "not_sad" {
+                if array[num+1] as! Double > array[num+3] as! Double {
+                    out = out + ["happy", array[num+1]]
+                } else {
+                    out = out + ["happy", array[num+3]]
+                }
+            }
+        }
+        if "\(array[num])" == "not_happy" {
+            if "\(array[num+2])" == "sad" {
+                if array[num+1] as! Double > array[num+3] as! Double {
+                    out = out + ["sad", array[num+1]]
+                } else {
+                    out = out + ["sad", array[num+3]]
+                }
+            }
+        }
+        if "\(array[num])" == "not_happy" {
+            if "\(array[num+2])" == "not_sad" {
+                if array[num+1] as! Double > array[num+3] as! Double {
+                    out = out + ["sad", array[num+1]]
+                } else {
+                    out = out + ["happy", array[num+3]]
+                }
+            }
+        }
+    }
+    for i in out.indices {
+        if "\(out[i])" == "happy" {
+            out[i] = "sad"
+            var b = out[i+1] as! Double
+            out[i+1] = 100.0 - b
+        }
+    }
+    var num: [Double] = []
+    var new1: [Double] = []
+    for i in out.indices {
+        if "\(type(of: out[i]))" != "String" {
+            num = num + [out[i] as! Double]
+        }
+    }
+    for i in out.indices {   
+        if "\(type(of: out[i]))" != "String" {
+            var b = out[i] as! Double
+            new1 = new1+[(b-num.min()!)/(num.max()!-num.min()!)]  
+        }
+    }
+    let Happy = new1
+    return Happy
+}
+
+func sortMoodParty(array: [Any]) -> [Any] {
+    var out: [Any] = array
+    for i in out.indices {
+        if "\(out[i])" == "not_party" {
+            out[i] = "party"
+            var b = out[i+1] as! Double
+            out[i+1] = 100.0 - b
+        }
+    }
+    var num: [Double] = []
+    var new1: [Double] = []
+    for i in out.indices {
+        if "\(type(of: out[i]))" != "String" {
+            num = num + [out[i] as! Double]
+        }
+    }
+    for i in out.indices {   
+        if "\(type(of: out[i]))" != "String" {
+            var b = out[i] as! Double
+            new1 = new1+[(b-num.min()!)/(num.max()!-num.min()!)]  
+        }
+    }
+    let Party = new1
+    return Party
+}
+
+let A = sortMoodAggressive(array: songsAggressive)
+let E = sortMoodElectronic(array: songsElectronic)
+let H = sortMoodHappy(array: songsHappy)
+let P = sortMoodParty(array: songsParty)
+
+
+var allMoods: [Any] = [] //Determines new mood value based on normalized range to best fit the song library
+for i in A.indices {     //If all moods are determined by AcousticBrainz to be happy, then the least happy of the songs will be relabled as sad based on the normalized range
+    var moods: [Any] = []
+    if A[i] as! Double >= 0.5 {
+        moods = moods + ["Aggressive"]    
+    } else {
+        moods = moods + ["Relaxed"]
+    }  
+    if E[i] as! Double >= 0.5 {
+        moods = moods + ["Electronic"]
+    } else {
+        moods = moods + ["Acoustic"]
+    }
+    if H[i] as! Double >= 0.5 {
+        moods = moods + ["Happy"]
+    } else {
+        moods = moods + ["Sad"]
+    }
+    if P[i] as! Double >= 0.5 {
+        moods = moods + ["Party"]
+    } else {
+        moods = moods + ["Chill"]
+    }
+    allMoods = allMoods + [moods]
+}
+
+let songMoodValues = allMoods //Picks songs based on mood inputs
+
+var songChoice: [String] = []       //CHANGED TO STRING 
+for i in songMoodValues.indices {
+    if songMoodValues[i] as! [String] == moodSettings {
+        songChoice = songChoice + [titles[i] as! String]
+    }
+}
+
+extension Array where Element: Hashable {     //NEW STUFF    COMPARES LIST SIMILARITY
+    func difference(from other: [Element]) -> [Element] {
+        let thisSet = Set(self)
+        let otherSet = Set(other)
+        return Array(thisSet.symmetricDifference(otherSet))
+    }
+}
+
+
+while songChoice.count < 15 {   //NEW STUFF  MAKES SURE SONGCHOICE IS AT LEAST 15 SONGS
+    for i in songMoodValues.indices {
+        if songChoice.count < 15 {
+            if (songMoodValues[i] as! [String]).difference(from: moodSettings).count == 2 {
+                songChoice = songChoice + [titles[i] as! String]
+            }
+        }    
+    }
+}
+
+
+var temposort: [String] = [] //Picks songs based on tempo input 
+for i in titles.indices {
+    if songChoice.contains(titles[i] as! String) {
+        if ((tempo[i] as! NSString).doubleValue) >= (inputTempo - 30.0) && ((tempo[i] as! NSString).doubleValue) <= (inputTempo + 30.0) {
+            temposort = temposort + [titles[i] as! String]
+        }
+    }
+}
+
+
+let drms = rms.compactMap { (value) -> Double? in
+    return Double(value)!
+}
+var nrms: [Double] = []  //Normalizes RMS values
+for i in drms.indices {
+    let b = drms[i] as! Double
+    nrms = nrms+[(b-drms.min()!)/(drms.max()!-drms.min()!)]      
+}
+
+
+
+let inputstart: Double = 0.0
+let inputend: Double = 1.0 
+var outputstart: Double = 0.0
+var outputend: Double = 1.0
+if activity == "Working Out" {
+    outputstart = 0.8
+    outputend = 1.0
+} else if activity == "Large Group" {
+    outputstart = 0.6
+    outputend = 0.8
+} else if activity == "Car Ride" {
+    outputstart = 0.4
+    outputend = 0.6
+} else if activity == "Small Group" {
+    outputstart = 0.2
+    outputend = 0.4
+} else if activity == "Studying" {
+    outputstart = 0.0
+    outputend = 0.2
+}
+
+var rmsValue: Double = outputstart + ((outputend - outputstart) / (inputend - inputstart)) * (rmsInput - inputstart)
+
+var rmssort: [String] = [] //Picks songs based on accelerometer data via songs' RMS values
+for i in titles.indices {
+    if temposort.contains(titles[i] as! String) {
+        if (nrms[i]) >= (rmsValue - 0.35) && (nrms[i]) <= (rmsValue + 0.35) {
+            rmssort = rmssort + [titles[i] as! String]
+        }
+    }
+}
+
+
+var genresort: [String] = []  //Picks songs based on genre input 
+for i in titles.indices {
+    if rmssort.contains(titles[i] as! String) {
+        if inputGenre.contains(genre[i]) {
+            genresort = genresort + [titles[i] as! String]
+        }
+    }
+}
+
+var out1: [String] = []  //NEW STUFF   MAKES SURE OUTPUT IS AT LEAST 5 SONGS
+if genresort.count < 5 {
+    if rmssort.count < 5 {
+        if temposort.count < 5 {
+            out1 = songChoice  
+        } else {
+            out1 = temposort
+        }
+    } else {
+        out1 = rmssort
+    }
+} else {
+    out1 = genresort
+}
+
+var finalsongs: [[Any]] = []  //Formats output with correct song info (title and artist name)
+for i in titles.indices {
+    if out1.contains(titles[i] as! String) {               //CHANGE TO OUT1.CONTAINS
+        finalsongs = finalsongs + [[titles[i], artists[i]]]
+    }
+}
+
+
+finalsongs.shuffle() //Shuffles songs 
+print(finalsongs)
