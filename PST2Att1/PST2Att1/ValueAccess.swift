@@ -22,6 +22,13 @@ class MyData: ObservableObject {
 }
 var motion = CMMotionManager()
 var motion3 = CMDeviceMotion()
+extension Array where Element: Hashable {     //NEW STUFF    COMPARES LIST SIMILARITY
+    func difference(from other: [Element]) -> [Element] {
+        let thisSet = Set(self)
+        let otherSet = Set(other)
+        return Array(thisSet.symmetricDifference(otherSet))
+    }
+}
 
 
 //Functions and temporary vars go here
@@ -358,61 +365,109 @@ class ValueAccess {
         var inputGenre = assignGenres()
         var activity = assignActivity()
         
-        //Temporary test values
-        moodSettings = ["Aggressive", "Electronic", "Sad", "Chill"]
-        inputTempo = 140.0
-        rmsInput = 0.25
-        inputGenre = ["jaz", "pop"]
-        activity = "Studying"
+        print(moodSettings)
+        print(inputTempo)
+        print(rmsInput)
+        print(inputGenre)
+        print(activity)
         
+        /*
+        //Temporary test values
+        moodSettings = ["Aggressive", "Electronic", "Sad", "Party"]
+        inputTempo = 100.0
+        rmsInput = 0.75
+        inputGenre = ["pop", "rhy", "spe", "jaz"]
+        activity = "Car Ride"
+         */
+        
+        /*
         // Determine the file name
-        let filename = "songs.txt"
-
+        let filename = "song_info1.txt"
         // Read the contents of the specified file
         let contents = try! String(contentsOfFile: filename)
-
         // Split the file into separate lines
         let lines = contents.components(separatedBy: "\n")
-
         //variable was "line" before but didnt seem to be used
         let _: [Any] = Array(String(lines[0]))
+        */
+        
+        var lines:[String] = []
+        let filename = "big_test2_song_info"
+        if let path = Bundle.main.path(forResource: filename, ofType: "txt"){
+            do {
+                let contents = try String(contentsOfFile: path, encoding: .utf8)
+                lines = contents.components(separatedBy: "\n")
+                //print("\"lines\" var:")
+                //print(lines)//remove later
+            } catch {
+                print(error)
+            }
+        } else {
+            print("ERROR OCCURED")
+        }
         
         var mbid_array: [Any] = []
         for i in lines.indices {
             let stringArray = lines[i]
-            let stringArrayCleaned = stringArray.description.replacingOccurrences(of: "\"", with: "").replacingOccurrences(of: "[", with: "").replacingOccurrences(of: " ", with: "").replacingOccurrences(of: "\r", with: "").replacingOccurrences(of: "\n", with: "")
-            //let stringArrayCleaned1: [Any] = stringArrayCleaned
-            let b = Array(stringArrayCleaned)
-            var h: String = ""
-            for i in b.indices {
-                h = h + String(b[i])
-            }
-            var sarray = h.components(separatedBy: CharacterSet(charactersIn: ",]"))
-            for i in sarray.indices {
-                sarray[i] = sarray[i].replacingOccurrences(of: "\'", with: "").replacingOccurrences(of: " ", with: "")
-            }
-            //print(sarray)
-            var news: [Any] = []
-            for i in sarray.indices {
-                if sarray[i] != "" {
-                    news = news + [sarray[i]]
+            let stringArrayCleaned = stringArray.description.replacingOccurrences(of: "\"", with: "").replacingOccurrences(of: ">", with: "").replacingOccurrences(of: "\r", with: "").replacingOccurrences(of: "\n", with: "").replacingOccurrences(of: "[", with: "").replacingOccurrences(of: "]", with: "")
+
+                //let stringArrayCleaned1: [Any] = stringArrayCleaned
+                let b = Array(stringArrayCleaned)
+
+                var h: String = ""
+
+                for i in b.indices {
+                    h = h + String(b[i])
                 }
-            }
-            mbid_array = mbid_array + [news]
+
+                var sarray = h.components(separatedBy: CharacterSet(charactersIn: "<#")) //CHANGED
+                for i in sarray.indices {
+                    sarray[i] = sarray[i].replacingOccurrences(of: "\'", with: "")
+                }
+                //print("\"sarray\" var:")
+                //print(sarray)
+                //print("Its length was:", sarray.count)
+                var news: [Any] = []
+                for i in sarray.indices {
+                    if sarray[i] != "" {
+                        news = news + [sarray[i]]
+                    }
+                }
+                mbid_array = mbid_array + [news]
+            
         }
         
+        //print("\"mbid_array\" var:")
+        //print(mbid_array)//remove
+        
         let f = mbid_array[1] as! [Any]
+        //print("\"f\" var:")
+        //print(f)//remove
         let num_songs: Int = f.count
+        //print("\"num_songs\" var:")
+        //print(num_songs)//remove
 
-        let moods = mbid_array[0] as! [Any]
-        let tempo = mbid_array[1] as! [Any]
-        let rms = mbid_array[2] as! [String]
-        let titles = mbid_array[3] as! [Any]
-        let artists = mbid_array[4] as! [Any]
-        //let albums = mbid_array[5] as! [Any]
-        //let dates = mbid_array[6] as! [Any]
-        //let tracknum = mbid_array[7] as! [Any]
-        let genre = mbid_array[8] as! [String]
+        var moods = mbid_array[0] as! [String]
+        var tempo = mbid_array[1] as! [String]
+        var rms = mbid_array[2] as! [String]
+        var titles = mbid_array[3] as! [String]
+        var artists = mbid_array[4] as! [String]
+        //var albums = mbid_array[5] as! [String]
+        //var dates = mbid_array[6] as! [String]
+        //var tracknum = mbid_array[7] as! [String]
+        var genre = mbid_array[8] as! [String]
+        
+        moods.removeAll { $0 == ", " } //NEW STUFF
+        tempo.removeAll { $0 == ", " }
+        rms.removeAll { $0 == ", " }
+        titles.removeAll { $0 == ", " }
+        artists.removeAll { $0 == ", " }
+        //albums.removeAll { $0 == ", " }
+        //dates.removeAll { $0 == ", " }
+        //tracknum.removeAll { $0 == ", " }
+        genre.removeAll { $0 == ", " }
+        
+        
         
         var mood_array: [Any] = []
         for i in 0...num_songs-1 {
@@ -489,18 +544,33 @@ class ValueAccess {
         var songChoice: [String] = []
         for i in songMoodValues.indices {
             if songMoodValues[i] as! [String] == moodSettings {
-                songChoice = songChoice + [titles[i] as! String]
+                songChoice = songChoice + [titles[i]]
+            }
+        }
+        
+        //print("songMoodValues var: ", songMoodValues)//remove
+        
+        //Extension was here? Moved to before class statement on line 25ish
+
+        while songChoice.count < 15 {   //NEW STUFF  MAKES SURE SONGCHOICE IS AT LEAST 15 SONGS
+            for i in songMoodValues.indices {
+                if songChoice.count < 15 {
+                    if (songMoodValues[i] as! [String]).difference(from: moodSettings).count == 2 {
+                        songChoice = songChoice + [titles[i]]
+                    }
+                }
             }
         }
         
         var temposort: [String] = []
         for i in titles.indices {
-            if songChoice.contains(titles[i] as! String) {
-                if ((tempo[i] as! NSString).doubleValue) >= (inputTempo - 20.0) && ((tempo[i] as! NSString).doubleValue) <= (inputTempo + 20.0) {
-                    temposort = temposort + [titles[i] as! String]
+            if songChoice.contains(titles[i]) {
+                if ((tempo[i] as NSString).doubleValue) >= (inputTempo - 20.0) && ((tempo[i] as NSString).doubleValue) <= (inputTempo + 20.0) {
+                    temposort = temposort + [titles[i]]
                 }
             }
         }
+        //print("songchoice var: ", songChoice)//remove
         
         let drms = rms.compactMap { (value) -> Double? in
             return Double(value)!
@@ -533,35 +603,69 @@ class ValueAccess {
         }
         
         
-        var rmsValue: Double = outputstart + ((outputend - outputstart) / (inputend - inputstart)) * (rmsInput - inputstart)
+        let rmsValue: Double = outputstart + ((outputend - outputstart) / (inputend - inputstart)) * (rmsInput - inputstart)
         var rmssort: [String] = []
         for i in titles.indices {
-            if temposort.contains(titles[i] as! String) {
+            if temposort.contains(titles[i]) {
                 if (nrms[i]) >= (rmsValue - 0.25) && (nrms[i]) <= (rmsValue + 0.25) {
-                    rmssort = rmssort + [titles[i] as! String]
+                    rmssort = rmssort + [titles[i]]
                 }
             }
         }
         
         var genresort: [String] = []  //Picks songs based on genre input
         for i in titles.indices {
-            if rmssort.contains(titles[i] as! String) {
+            if rmssort.contains(titles[i]) {
+                //print(i)//remove
                 if inputGenre.contains(genre[i]) {
-                    genresort = genresort + [titles[i] as! String]
+                    genresort = genresort + [titles[i]]
                 }
             }
         }
         
+        var out1: [String] = []  //NEW STUFF   MAKES SURE OUTPUT IS AT LEAST 5 SONGS
+        if genresort.count < 5 {
+            if rmssort.count < 5 {
+                if temposort.count < 5 {
+                    out1 = songChoice
+                } else {
+                    out1 = temposort
+                }
+            } else {
+                out1 = rmssort
+            }
+        } else {
+            out1 = genresort
+        }
+        
+        
         var finalsongs: [[Any]] = []
         for i in titles.indices {
-            if rmssort.contains(titles[i] as! String) {
+            if out1.contains(titles[i]) {
                 finalsongs = finalsongs + [[titles[i], artists[i]]]
             }
         }
         finalsongs.shuffle()
         //print(finalsongs)
-        //return finalsongs
-        return [["Test"],["Array"]]
+        return finalsongs
+        //return [["Test"],["Array"]]
+    }
+    
+    func tryFileStuff() {
+        
+        let file = "song_info1"
+        if let path = Bundle.main.path(forResource: file, ofType: "txt"){
+            do {
+                let data = try String(contentsOfFile: path, encoding: .utf8)
+                let myStrings = data.components(separatedBy: .newlines)
+                let text = myStrings.joined(separator: "\n")
+                print("\(text)")
+            } catch {
+                print(error)
+            }
+        }
+        
+        
     }
     
     
