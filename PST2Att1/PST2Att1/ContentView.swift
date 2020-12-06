@@ -18,13 +18,15 @@ let VA = ValueAccess()
 
 var xTempo: Double = -1
 var xBool: [Bool] = [false, false, false, false, false, false, false, false, false, false, false, false]
-var happenActions = ["Working Out", "Car Ride", "Studying", "Small Group", "Large Group"]
+var happenActions = ["Studying", "Car Ride", "Working Out", "With Friends", "In a Crowd"]
 var xSelection: Int = -1
-var xAcd: Double = 0.0
+var xAcd: Double = 0.75
 
 struct ContentView: View {
     //@ObservedObject var data = MyData()
     @State var tempo2 : Double = 120
+    
+    @State var buttonText : String = "Set my choices!"
     
     @State var g1: Bool = false
     @State var g2: Bool = false
@@ -35,10 +37,10 @@ struct ContentView: View {
     @State var g7: Bool = false
     @State var g8: Bool = false
     
-    @State var g9: Bool = true
+    @State var g9: Bool = false
     @State var g10: Bool = false
-    @State var g11: Bool = true
-    @State var g12: Bool = false
+    @State var g11: Bool = false
+    @State var g12: Bool = true
     
     @State var accelx : Double = 0.0
     @State var accely : Double = 0.0
@@ -94,12 +96,18 @@ struct ContentView: View {
         ScrollView(showsIndicators: false) {
             VStack() {
                 
-               Spacer().frame(height: 50)
+                //Header
+                VStack() {
+                    Spacer().frame(height: 10)
+                    Text("Move-it Music!").font(.custom("Marker Felt Thin", size: 42))
+                        .foregroundColor(.blue)
+                    Spacer().frame(height: 20)
+                }
 
                 //Actions
                 VStack() {
                 Text("What are you doing right now?")
-                    .font(.headline)
+                    .font(.custom("Big Caslon", size: 22)).fontWeight(.bold)
                 Picker(selection: $selectedAction, label: Text("")) {
                     ForEach(0 ..< happenActions.count) {
                         Text(happenActions[$0])
@@ -113,43 +121,49 @@ struct ContentView: View {
                 //Genres
                 VStack() {
                 Text("Select the genres you'd like to hear")
-                    .font(.headline)
+                    .font(.custom("Big Caslon", size: 22)).fontWeight(.bold)
                     
                    Toggle(isOn: $g1) {
                    Text("Classical")
                    }
                    .padding(.horizontal)
                    .frame(width: 200, height: 30)
+                   .toggleStyle(SwitchToggleStyle(tint: .purple))
                     
                    Toggle(isOn: $g2) {
                     Text("Dance")
                     }
                     .padding(.horizontal)
                     .frame(width: 200, height: 30)
+                    .toggleStyle(SwitchToggleStyle(tint: .purple))
                     
                     Toggle(isOn: $g3) {
                     Text("Hip-Hop")
                     }
                     .padding(.horizontal)
                     .frame(width: 200, height: 30)
+                    .toggleStyle(SwitchToggleStyle(tint: .purple))
                     VStack() {
                         Toggle(isOn: $g4) {
                         Text("Jazz")
                         }
                         .padding(.horizontal)
                         .frame(width: 200, height: 30)
+                        .toggleStyle(SwitchToggleStyle(tint: .purple))
                          
                         Toggle(isOn: $g5) {
                          Text("Pop")
                          }
                          .padding(.horizontal)
                          .frame(width: 200, height: 30)
+                         .toggleStyle(SwitchToggleStyle(tint: .purple))
                          
                          Toggle(isOn: $g6) {
                          Text("RnB")
                          }
                          .padding(.horizontal)
                          .frame(width: 200, height: 30)
+                         .toggleStyle(SwitchToggleStyle(tint: .purple))
                     }
                     VStack() {
                         Toggle(isOn: $g7) {
@@ -157,12 +171,14 @@ struct ContentView: View {
                         }
                         .padding(.horizontal)
                         .frame(width: 200, height: 30)
+                        .toggleStyle(SwitchToggleStyle(tint: .purple))
                          
                         Toggle(isOn: $g8) {
                          Text("Speech")
                          }
                          .padding(.horizontal)
                          .frame(width: 200, height: 30)
+                         .toggleStyle(SwitchToggleStyle(tint: .purple))
                     }
                 }
                 }
@@ -170,12 +186,13 @@ struct ContentView: View {
                 //Moods
                 VStack() {
                     Spacer().frame(height: 25)
-                    Text("What sort of mood are you in?").font(.headline)
+                    Text("What sort of mood are you in?").font(.custom("Big Caslon", size: 22)).fontWeight(.bold)
                         HStack() {
                             Text("Aggressive")
                             Toggle(isOn : $g9){ Text("a")
                             
                             }.padding(.horizontal).frame(width: 50)
+                            .toggleStyle(SwitchToggleStyle(tint: .green))
                             Text("  Relaxed    ")
                         }
                         HStack() {
@@ -183,6 +200,7 @@ struct ContentView: View {
                             Toggle(isOn: $g10) { Text("b")
                             
                             }.padding(.horizontal).frame(width: 50)
+                            .toggleStyle(SwitchToggleStyle(tint: .green))
                             Text("  Accoustic  ")
                         }
                         HStack() {
@@ -190,6 +208,7 @@ struct ContentView: View {
                             Toggle(isOn: $g11) { Text("c")
                             
                             }.padding(.horizontal).frame(width: 50)
+                            .toggleStyle(SwitchToggleStyle(tint: .green))
                             Text("   Sad        ")
                         }
                         HStack() {
@@ -197,6 +216,7 @@ struct ContentView: View {
                             Toggle(isOn: $g12) { Text("d")
                             
                             }.padding(.horizontal).frame(width: 50)
+                            .toggleStyle(SwitchToggleStyle(tint: .green))
                             Text("  Small Group")
                         }
                     
@@ -204,30 +224,32 @@ struct ContentView: View {
                 Spacer().frame(height: 30)
                 VStack(){
                         
-                        Text("Select your speed/tempo").font(.headline)
+                        Text("Select your speed/tempo").font(.custom("Big Caslon", size: 22)).fontWeight(.bold)
                         Slider(value: $tempo2, in: 40...200).frame(width: 300)
                         Text("\(Int(tempo2))")
-                        Spacer().frame(height: 20)
+                        Spacer().frame(height: 10)
                         
                 }
                 
                 //Update
                 VStack() {
                     
-                    Text("Press here to update your choices").font(.headline)
-                    Spacer().frame(height: 15)
+                    //Text("Press here to update your choices").font(.custom("Big Caslon", size: 22)).fontWeight(.bold)
+                    Spacer().frame(height: 10)
                     HStack() {
                         
                         Button(action: {
                             if ((!g1 && !g2 && !g3 && !g4 && !g5 && !g6 && !g7 && !g8)) {
                                 showingAlert.toggle()
                             } else {
+                                buttonText = "Update my choices!"
+                                
                                 //"Export" values to global variables
                                 self.exportTempo()
                                 self.exportBools()
                                 self.exportSelection()
                                 //self.startAccel()
-                                self.exportAccelMag()
+                                //self.exportAccelMag()
                                 //self.stopAccel()
                                 
                                 //Below prints out all current values
@@ -252,27 +274,58 @@ struct ContentView: View {
                                 VA.musicPrinter()
                                 
                                 //Test stuff again
+                                //VA.tryFileStuff()
+                                print("return statement below: ")
+                                print(VA.calculate())
                             }
 
                         }) {
-                            Text("Update!")
-                        }
+                            Text("\(String(buttonText))").font(.custom("Marker Felt Thin", size: 26))
+                                .foregroundColor(.white)
+                        }.buttonStyle(NeumorphicButtonStyle(bgColor: .blue))
                      
                     }
                     Spacer().frame(height: 20)
+                    /*
                     Text("\(Double(accelx))")
                     Text("\(Double(accely))")
                     Text("\(Double(accelz))")
                     Text("\(Double(accelmag))").font(.headline)
+                    */
                 }
               
                 
             }
     
-        }.alert(isPresented: $showingAlert) {
+        }/*.frame(width: 500).background(SwiftUI.Color.primary.edgesIgnoringSafeArea(.all))*/
+        .alert(isPresented: $showingAlert) {
             Alert(title: Text("Attention!"), message: Text("Please select at least one genre"), dismissButton: .default(Text("OK")))
         }
 
+    }
+}
+
+struct NeumorphicButtonStyle: ButtonStyle {
+    var bgColor: Color
+
+    func makeBody(configuration: Self.Configuration) -> some View {
+        configuration.label
+            .padding(20)
+            .background(
+                ZStack {
+                    RoundedRectangle(cornerRadius: 10, style: .continuous)
+                        /*
+                        .shadow(color: .white, radius: configuration.isPressed ? 7: 10, x: configuration.isPressed ? 2: 2, y: configuration.isPressed ? 2: 2)
+                        .shadow(color: .white, radius: configuration.isPressed ? 7: 10, x: configuration.isPressed ? -1: -1, y: configuration.isPressed ? -1: -1)
+                        .shadow(color: .gray, radius: configuration.isPressed ? 7: 10, x: configuration.isPressed ? 1: 1, y: configuration.isPressed ? 1: 1)
+                        .blendMode(.overlay)*/
+                    RoundedRectangle(cornerRadius: 10, style: .continuous)
+                        .fill(bgColor)/*.border(bgColor)*/
+                }
+        )
+            .scaleEffect(configuration.isPressed ? 0.95: 1)
+            .foregroundColor(.primary)
+            .animation(.spring())
     }
 }
 
