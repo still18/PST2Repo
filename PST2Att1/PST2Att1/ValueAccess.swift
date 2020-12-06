@@ -17,18 +17,23 @@ import CoreMotion
 
 //Permanent/Changing vars go here or at top of other classes
 let musicP = MPMusicPlayerApplicationController.applicationQueuePlayer
-class MyData: ObservableObject {
-    @Published var tempo : Double = 120
-}
-class SongPlaying: ObservableObject {
-    @Published var songName : String = "-" {
-        willSet {
-            objectWillChange.send()
-        }
-    }
-}
 var motion = CMMotionManager()
 var motion3 = CMDeviceMotion()
+
+var ilist: [Int] = []
+var moods: [String] = []
+var tempo : [String] = []
+var rms : [String] = []
+var titles : [String] = []
+var artists : [String] = []
+var albums : [String] = []
+var dates : [String] = []
+var tracknum : [String] = []
+var genre : [String] = []
+
+var maxAmount: Int = -1
+
+
 extension Array where Element: Hashable {     //NEW STUFF    COMPARES LIST SIMILARITY
     func difference(from other: [Element]) -> [Element] {
         let thisSet = Set(self)
@@ -36,12 +41,22 @@ extension Array where Element: Hashable {     //NEW STUFF    COMPARES LIST SIMIL
         return Array(thisSet.symmetricDifference(otherSet))
     }
 }
+extension Array {
+    mutating func remove(at indexs: [Int]) {
+        guard !isEmpty else { return }
+        let newIndexs = Set(indexs).sorted(by: >)
+        newIndexs.forEach {
+            guard $0 < count, $0 >= 0 else { return }
+            remove(at: $0)
+        }
+    }
+}
 
 
 //Functions and temporary vars go here
 class ValueAccess {
     
-    @ObservedObject var yeet = SongPlaying()
+    //@ObservedObject var yeet = SongPlaying()
     
     
     func startDefaultQueue() {
@@ -52,7 +67,7 @@ class ValueAccess {
     
     func pauseMusic() {
         musicP.pause()
-        yeet.songName = "bet?"
+        //yeet.songName = "bet?"
     }
     
     func playMusic() {
@@ -363,42 +378,31 @@ class ValueAccess {
         return Party
     }
     
+    func reloadSongs() {
+        moods = loadFile()[0] as! [String]
+        tempo = loadFile()[1] as! [String]
+        rms = loadFile()[2] as! [String]
+        titles = loadFile()[3] as! [String]
+        artists = loadFile()[4] as! [String]
+        albums = loadFile()[5] as! [String]
+        dates = loadFile()[6] as! [String]
+        tracknum = loadFile()[7] as! [String]
+        genre = loadFile()[8] as! [String]
+    }
     
+    func removeUnec() {
+        moods.removeAll { $0 == ", " }
+        tempo.removeAll { $0 == ", " }
+        rms.removeAll { $0 == ", " }
+        titles.removeAll { $0 == ", " }
+        artists.removeAll { $0 == ", " }
+        albums.removeAll { $0 == ", " }
+        dates.removeAll { $0 == ", " }
+        tracknum.removeAll { $0 == ", " }
+        genre.removeAll { $0 == ", " }
+    }
     
-    func calculate() -> [[Any]] {
-        
-        var moodSettings = assignMoods()
-        var inputTempo = xTempo
-        var rmsInput = xAcd
-        var inputGenre = assignGenres()
-        var activity = assignActivity()
-        
-        print(moodSettings)
-        print(inputTempo)
-        print(rmsInput)
-        print(inputGenre)
-        print(activity)
-        
-        /*
-        //Temporary test values
-        moodSettings = ["Aggressive", "Electronic", "Sad", "Party"]
-        inputTempo = 100.0
-        rmsInput = 0.75
-        inputGenre = ["pop", "rhy", "spe", "jaz"]
-        activity = "Car Ride"
-         */
-        
-        /*
-        // Determine the file name
-        let filename = "song_info1.txt"
-        // Read the contents of the specified file
-        let contents = try! String(contentsOfFile: filename)
-        // Split the file into separate lines
-        let lines = contents.components(separatedBy: "\n")
-        //variable was "line" before but didnt seem to be used
-        let _: [Any] = Array(String(lines[0]))
-        */
-        
+    func loadFile() -> [Any] {
         var lines:[String] = []
         let filename = "big_test2_song_info"
         if let path = Bundle.main.path(forResource: filename, ofType: "txt"){
@@ -414,250 +418,286 @@ class ValueAccess {
             print("ERROR OCCURED")
         }
         
+        //Reads lines of file into array with necessary format adjustments
         var mbid_array: [Any] = []
         for i in lines.indices {
             let stringArray = lines[i]
+                                                                                                  
             let stringArrayCleaned = stringArray.description.replacingOccurrences(of: "\"", with: "").replacingOccurrences(of: ">", with: "").replacingOccurrences(of: "\r", with: "").replacingOccurrences(of: "\n", with: "").replacingOccurrences(of: "[", with: "").replacingOccurrences(of: "]", with: "")
-
-                //let stringArrayCleaned1: [Any] = stringArrayCleaned
-                let b = Array(stringArrayCleaned)
-
-                var h: String = ""
-
-                for i in b.indices {
-                    h = h + String(b[i])
+        
+            let b = Array(stringArrayCleaned)
+        
+            var h: String = ""
+        
+            for i in b.indices {
+                h = h + String(b[i])
+            }
+        
+            var sarray = h.components(separatedBy: CharacterSet(charactersIn: "<#"))
+            for i in sarray.indices {
+                sarray[i] = sarray[i].replacingOccurrences(of: "\'", with: "")
+            }
+            //print(sarray)
+            var news: [Any] = []
+            for i in sarray.indices {
+                if sarray[i] != "" {
+                    news = news + [sarray[i]]
                 }
+            }
+            mbid_array = mbid_array + [news]
+        }
+        return mbid_array
+    }
+    
+    func calculate(firstTime: Bool) -> [Any] {
+        
 
-                var sarray = h.components(separatedBy: CharacterSet(charactersIn: "<#")) //CHANGED
-                for i in sarray.indices {
-                    sarray[i] = sarray[i].replacingOccurrences(of: "\'", with: "")
-                }
-                //print("\"sarray\" var:")
-                //print(sarray)
-                //print("Its length was:", sarray.count)
-                var news: [Any] = []
-                for i in sarray.indices {
-                    if sarray[i] != "" {
-                        news = news + [sarray[i]]
-                    }
-                }
-                mbid_array = mbid_array + [news]
-            
+        if (firstTime) {
+            reloadSongs()
+        }
+
+        removeUnec()
+
+        let num_songs: Int = titles.count
+        if (firstTime) {
+            maxAmount = num_songs
+            print("Max amount of songs: ", maxAmount)
+        }
+        print("Songs to select from: ", num_songs)
+        
+        if (num_songs < (maxAmount / 4)) {
+            reloadSongs()
+            removeUnec()
         }
         
-        //print("\"mbid_array\" var:")
-        //print(mbid_array)//remove
-        
-        let f = mbid_array[1] as! [Any]
-        //print("\"f\" var:")
-        //print(f)//remove
-        let num_songs: Int = f.count
-        //print("\"num_songs\" var:")
-        //print(num_songs)//remove
-
-        var moods = mbid_array[0] as! [String]
-        var tempo = mbid_array[1] as! [String]
-        var rms = mbid_array[2] as! [String]
-        var titles = mbid_array[3] as! [String]
-        var artists = mbid_array[4] as! [String]
-        //var albums = mbid_array[5] as! [String]
-        //var dates = mbid_array[6] as! [String]
-        //var tracknum = mbid_array[7] as! [String]
-        var genre = mbid_array[8] as! [String]
-        
-        moods.removeAll { $0 == ", " } //NEW STUFF
-        tempo.removeAll { $0 == ", " }
-        rms.removeAll { $0 == ", " }
-        titles.removeAll { $0 == ", " }
-        artists.removeAll { $0 == ", " }
-        //albums.removeAll { $0 == ", " }
-        //dates.removeAll { $0 == ", " }
-        //tracknum.removeAll { $0 == ", " }
-        genre.removeAll { $0 == ", " }
-        
-        
-        
+        //Sorts mood values by song (array for each song)
         var mood_array: [Any] = []
         for i in 0...num_songs-1 {
             mood_array = mood_array + [Array(moods[(i*14)..<(i*14+14)])]
         }
+        //print(mood_array)
 
-        var songsAggressive: [Any] = []
-        var songsElectronic: [Any] = []
-        var songsHappy: [Any] = []
-        var songsParty: [Any] = []
-        for i in mood_array.indices {
-            songsAggressive = songsAggressive + (mood_array[i] as! [Any])[0..<4]
-            songsElectronic = songsElectronic + (mood_array[i] as! [Any])[4..<8]
-            songsHappy = songsHappy + (mood_array[i] as! [Any])[8..<12]
-            songsParty = songsParty + (mood_array[i] as! [Any])[12..<14]
-        }
         
-        for i in songsAggressive.indices {
-            if i % 2 != 0 {
-                let b: Any = songsAggressive[i]
-                songsAggressive[i] = (b as! NSString).doubleValue
-            }
-        }
-        for i in songsElectronic.indices {
-            if i % 2 != 0 {
-                let b: Any = songsElectronic[i]
-                songsElectronic[i] = (b as! NSString).doubleValue
-            }
-        }
-        for i in songsHappy.indices {
-            if i % 2 != 0 {
-                let b: Any = songsHappy[i]
-                songsHappy[i] = (b as! NSString).doubleValue
-            }
-        }
-        for i in songsParty.indices {
-            if i % 2 != 0 {
-                let b: Any = songsParty[i]
-                songsParty[i] = (b as! NSString).doubleValue
-            }
-        }
-        
-        let A = sortMoodAggressive(array: songsAggressive)
-        let E = sortMoodElectronic(array: songsElectronic)
-        let H = sortMoodHappy(array: songsHappy)
-        let P = sortMoodParty(array: songsParty)
-        var allMoods: [Any] = []
-        for i in A.indices {
-            var moods: [Any] = []
-            if A[i] as! Double >= 0.5 {
-                moods = moods + ["Aggressive"]
-            } else {
-                moods = moods + ["Relaxed"]
-            }
-            if E[i] as! Double >= 0.5 {
-                moods = moods + ["Electronic"]
-            } else {
-                moods = moods + ["Acoustic"]
-            }
-            if H[i] as! Double >= 0.5 {
-                moods = moods + ["Happy"]
-            } else {
-                moods = moods + ["Sad"]
-            }
-            if P[i] as! Double >= 0.5 {
-                moods = moods + ["Party"]
-            } else {
-                moods = moods + ["Chill"]
-            }
-            allMoods = allMoods + [moods]
-        }
-        
-        let songMoodValues = allMoods
-        var songChoice: [String] = []
-        for i in songMoodValues.indices {
-            if songMoodValues[i] as! [String] == moodSettings {
-                songChoice = songChoice + [titles[i]]
-            }
-        }
-        
-        //print("songMoodValues var: ", songMoodValues)//remove
-        
-        //Extension was here? Moved to before class statement on line 25ish
 
-        while songChoice.count < 15 {   //NEW STUFF  MAKES SURE SONGCHOICE IS AT LEAST 15 SONGS
+        func Mappings(moodSettings: [String], inputTempo: Double, rmsInput: Double, inputGenre: [String], activity: String) -> [Any]{
+            
+            //Sorts each songs mood values into each mood type
+            var songsAggressive: [Any] = []
+            var songsElectronic: [Any] = []
+            var songsHappy: [Any] = []
+            var songsParty: [Any] = []
+            for i in mood_array.indices {
+                songsAggressive = songsAggressive + (mood_array[i] as! [Any])[0..<4]
+                songsElectronic = songsElectronic + (mood_array[i] as! [Any])[4..<8]
+                songsHappy = songsHappy + (mood_array[i] as! [Any])[8..<12]
+                songsParty = songsParty + (mood_array[i] as! [Any])[12..<14]
+            }
+
+            //Converts numerical values from string to double for each mood type
+            for i in songsAggressive.indices {
+                if i % 2 != 0 {
+                    let b: Any = songsAggressive[i]
+                    songsAggressive[i] = (b as! NSString).doubleValue
+                }
+            }
+            for i in songsElectronic.indices {
+                if i % 2 != 0 {
+                    let b: Any = songsElectronic[i]
+                    songsElectronic[i] = (b as! NSString).doubleValue
+                }
+            }
+            for i in songsHappy.indices {
+                if i % 2 != 0 {
+                    let b: Any = songsHappy[i]
+                    songsHappy[i] = (b as! NSString).doubleValue
+                }
+            }
+            for i in songsParty.indices {
+                if i % 2 != 0 {
+                    let b: Any = songsParty[i]
+                    songsParty[i] = (b as! NSString).doubleValue
+                }
+            }
+            
+            let A = sortMoodAggressive(array: songsAggressive)
+            let E = sortMoodElectronic(array: songsElectronic)
+            let H = sortMoodHappy(array: songsHappy)
+            let P = sortMoodParty(array: songsParty)
+            
+            //Determines new mood value based on normalized range to best fit the song library
+            var allMoods: [Any] = []
+            for i in A.indices {     //If all moods are determined by AcousticBrainz to be happy, then the least happy of the songs will be relabled as sad based on the normalized range
+                var moods: [Any] = []
+                if A[i] as! Double >= 0.5 {
+                    moods = moods + ["Aggressive"]
+                } else {
+                    moods = moods + ["Relaxed"]
+                }
+                if E[i] as! Double >= 0.5 {
+                    moods = moods + ["Electronic"]
+                } else {
+                    moods = moods + ["Acoustic"]
+                }
+                if H[i] as! Double >= 0.5 {
+                    moods = moods + ["Happy"]
+                } else {
+                    moods = moods + ["Sad"]
+                }
+                if P[i] as! Double >= 0.5 {
+                    moods = moods + ["Party"]
+                } else {
+                    moods = moods + ["Chill"]
+                }
+                allMoods = allMoods + [moods]
+            }
+            
+            //Picks songs based on mood inputs
+            let songMoodValues = allMoods
+            
+            var songChoice: [String] = []
             for i in songMoodValues.indices {
-                if songChoice.count < 15 {
-                    if (songMoodValues[i] as! [String]).difference(from: moodSettings).count == 2 {
-                        songChoice = songChoice + [titles[i]]
+                if songMoodValues[i] as! [String] == moodSettings {
+                    songChoice = songChoice + [titles[i]]
+                }
+            }
+            
+            
+            
+            //Makes songchoices at least 15 songs
+            while songChoice.count < 15 {
+                for i in songMoodValues.indices {
+                    if songChoice.count < 15 {
+                        if (songMoodValues[i] as! [String]).difference(from: moodSettings).count == 2 {
+                            songChoice = songChoice + [titles[i]]
+                        }
                     }
                 }
             }
-        }
-        
-        var temposort: [String] = []
-        for i in titles.indices {
-            if songChoice.contains(titles[i]) {
-                if ((tempo[i] as NSString).doubleValue) >= (inputTempo - 20.0) && ((tempo[i] as NSString).doubleValue) <= (inputTempo + 20.0) {
-                    temposort = temposort + [titles[i]]
+            
+            //Picks songs based on tempo input
+            var temposort: [String] = []
+            for i in titles.indices {
+                if songChoice.contains(titles[i]) {
+                    if ((tempo[i] as! NSString).doubleValue) >= (inputTempo - 30.0) && ((tempo[i] as! NSString).doubleValue) <= (inputTempo + 30.0) {
+                        temposort = temposort + [titles[i]]
+                    }
                 }
             }
-        }
-        //print("songchoice var: ", songChoice)//remove
-        
-        let drms = rms.compactMap { (value) -> Double? in
-            return Double(value)!
-        }
-        var nrms: [Double] = []
-        for i in drms.indices {
-            let b = drms[i] //as! Double
-            nrms = nrms+[(b-drms.min()!)/(drms.max()!-drms.min()!)]
-        }
-        
-        let inputstart: Double = 0.0    //Maps RMS Calculation based on activity
-        let inputend: Double = 1.0
-        var outputstart: Double = 0.0
-        var outputend: Double = 1.0
-        if activity == "Working Out" {
-            outputstart = 0.8
-            outputend = 1.0
-        } else if activity == "Large Group" {
-            outputstart = 0.6
-            outputend = 0.8
-        } else if activity == "Car Ride" {
-            outputstart = 0.4
-            outputend = 0.6
-        } else if activity == "Small Group" {
-            outputstart = 0.2
-            outputend = 0.4
-        } else if activity == "Studying" {
-            outputstart = 0.0
-            outputend = 0.2
-        }
-        
-        
-        let rmsValue: Double = outputstart + ((outputend - outputstart) / (inputend - inputstart)) * (rmsInput - inputstart)
-        var rmssort: [String] = []
-        for i in titles.indices {
-            if temposort.contains(titles[i]) {
-                if (nrms[i]) >= (rmsValue - 0.25) && (nrms[i]) <= (rmsValue + 0.25) {
-                    rmssort = rmssort + [titles[i]]
+            
+            
+            let drms = rms.compactMap { (value) -> Double? in
+                return Double(value)!
+            }
+            
+            //Normalizes RMS values
+            var nrms: [Double] = []
+            for i in drms.indices {
+                let b = drms[i]
+                nrms = nrms+[(b-drms.min()!)/(drms.max()!-drms.min()!)]
+            }
+            
+            
+            
+            let inputstart: Double = 0.0
+            let inputend: Double = 7.0
+            var outputstart: Double = 0.0
+            var outputend: Double = 1.0
+            if activity == "Working Out" {
+                outputstart = 0.8
+                outputend = 1.0
+            } else if activity == "In a Crowd" {
+                outputstart = 0.6
+                outputend = 0.8
+            } else if activity == "Car Ride" {
+                outputstart = 0.4
+                outputend = 0.6
+            } else if activity == "With Friends" {
+                outputstart = 0.2
+                outputend = 0.4
+            } else if activity == "Studying" {
+                outputstart = 0.0
+                outputend = 0.2
+            }
+            
+            let rmsValue: Double = outputstart + ((outputend - outputstart) / (inputend - inputstart)) * (rmsInput - inputstart)
+            
+            //Picks songs based on accelerometer data via songs' RMS values
+            var rmssort: [String] = []
+            for i in titles.indices {
+                if temposort.contains(titles[i]) {
+                    if (nrms[i]) >= (rmsValue - 0.35) && (nrms[i]) <= (rmsValue + 0.35) {
+                        rmssort = rmssort + [titles[i]]
+                    }
                 }
             }
-        }
-        
-        var genresort: [String] = []  //Picks songs based on genre input
-        for i in titles.indices {
-            if rmssort.contains(titles[i]) {
-                //print(i)//remove
-                if inputGenre.contains(genre[i]) {
-                    genresort = genresort + [titles[i]]
+            
+            //Picks songs based on genre input
+            var genresort: [String] = []
+            for i in titles.indices {
+                if rmssort.contains(titles[i]) {
+                    if inputGenre.contains(genre[i]) {
+                        genresort = genresort + [titles[i]]
+                    }
                 }
             }
-        }
-        
-        var out1: [String] = []  //NEW STUFF   MAKES SURE OUTPUT IS AT LEAST 5 SONGS
-        if genresort.count < 5 {
-            if rmssort.count < 5 {
-                if temposort.count < 5 {
-                    out1 = songChoice
+            
+            //Makes minimum of 5 song output
+            var out1: [String] = []
+            if genresort.count < 5 {
+                if rmssort.count < 5 {
+                    if temposort.count < 5 {
+                        out1 = songChoice
+                    } else {
+                        out1 = temposort
+                    }
                 } else {
-                    out1 = temposort
+                    out1 = rmssort
                 }
             } else {
-                out1 = rmssort
+                out1 = genresort
             }
-        } else {
-            out1 = genresort
-        }
-        
-        
-        var finalsongs: [[Any]] = []
-        for i in titles.indices {
-            if out1.contains(titles[i]) {
-                finalsongs = finalsongs + [[titles[i], artists[i]]]
+            
+            //Formats output with correct song info (title and artist name)
+            var finalsongs: [[Any]] = []
+            for i in titles.indices {
+                if out1.contains(titles[i]) {
+                    finalsongs = finalsongs + [[titles[i], artists[i]]]
+                    ilist = ilist + [i]
+                    
+                }
             }
+            
+            //Removes songs at indices to prevent replay
+            artists.remove(at: ilist)
+            titles.remove(at: ilist)
+            mood_array.remove(at: ilist)
+            tempo.remove(at: ilist)
+            rms.remove(at: ilist)
+            albums.remove(at: ilist)
+            tracknum.remove(at: ilist)
+            dates.remove(at: ilist)
+            genre.remove(at: ilist)
+            
+            if finalsongs.count < 5 {
+                reloadSongs()
+            }
+            
+            finalsongs.shuffle()
+            return finalsongs
         }
-        finalsongs.shuffle()
-        //print(finalsongs)
-        return finalsongs
-        //return [["Test"],["Array"]]
+
+
+        let moodSettings = assignMoods()
+        let inputTempo = xTempo
+        let rmsInput = 0.75//CHANGE TO ACTUAL VAR
+        let inputGenre = assignGenres()
+        let activity = assignActivity()
+        
+        //print(titles.count)
+        return Mappings(moodSettings: moodSettings, inputTempo: inputTempo, rmsInput: rmsInput, inputGenre: inputGenre, activity: activity)
     }
+    
+    
     
     func tryFileStuff() {
         

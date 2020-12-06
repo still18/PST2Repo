@@ -50,6 +50,7 @@ struct ContentView: View {
     
     @State var selectedAction = 2
     @State var showingAlert = false
+    @State var firstTimeAlg = true
     
     func exportTempo() {
         xTempo = tempo2
@@ -278,7 +279,8 @@ struct ContentView: View {
                                 //Test stuff again
                                 //VA.tryFileStuff()
                                 print("return statement below: ")
-                                print(VA.calculate())
+                                print(VA.calculate(firstTime: firstTimeAlg))
+                                self.firstTimeAlg = false
                             }
 
                         }) {
