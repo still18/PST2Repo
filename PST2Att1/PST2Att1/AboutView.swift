@@ -41,7 +41,7 @@ struct AboutView: View {
                 Text("Our GitHub: ").fontWeight(.bold)
                 Spacer().frame(height: 12)
                 //Text("[put tinyurl or button here]")
-                Link("MAKE PUBLIC SEAN", destination: URL(string: "https://github.com/still18/PST2Repo")!)
+                Link("CLICK HERE", destination: URL(string: "https://github.com/still18/PST2Repo")!)
                     .font(.custom("Big Caslon", size: 24))
             }.frame(width: 320)
             

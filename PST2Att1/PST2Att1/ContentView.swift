@@ -21,6 +21,7 @@ var xBool: [Bool] = [false, false, false, false, false, false, false, false, fal
 var happenActions = ["Studying", "Car Ride", "Working Out", "With Friends", "In a Crowd"]
 var xSelection: Int = -1
 var xAcd: Double = 0.75
+var initialSet: Bool = false
 
 struct ContentView: View {
     //@ObservedObject var data = MyData()
@@ -243,7 +244,8 @@ struct ContentView: View {
                                 showingAlert.toggle()
                             } else {
                                 buttonText = "Update my choices!"
-                                
+                                initialSet = true
+                                VA.startDefaultQueue()
                                 //"Export" values to global variables
                                 self.exportTempo()
                                 self.exportBools()
@@ -299,7 +301,7 @@ struct ContentView: View {
     
         }/*.frame(width: 500).background(SwiftUI.Color.primary.edgesIgnoringSafeArea(.all))*/
         .alert(isPresented: $showingAlert) {
-            Alert(title: Text("Attention!"), message: Text("Please select at least one genre"), dismissButton: .default(Text("OK")))
+            Alert(title: Text("Attention!"), message: Text("Please select at least one genre."), dismissButton: .default(Text("OK!")))
         }
 
     }

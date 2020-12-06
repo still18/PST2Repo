@@ -20,6 +20,13 @@ let musicP = MPMusicPlayerApplicationController.applicationQueuePlayer
 class MyData: ObservableObject {
     @Published var tempo : Double = 120
 }
+class SongPlaying: ObservableObject {
+    @Published var songName : String = "-" {
+        willSet {
+            objectWillChange.send()
+        }
+    }
+}
 var motion = CMMotionManager()
 var motion3 = CMDeviceMotion()
 extension Array where Element: Hashable {     //NEW STUFF    COMPARES LIST SIMILARITY
@@ -34,17 +41,18 @@ extension Array where Element: Hashable {     //NEW STUFF    COMPARES LIST SIMIL
 //Functions and temporary vars go here
 class ValueAccess {
     
-    @ObservedObject var testData = MyData()
+    @ObservedObject var yeet = SongPlaying()
     
     
     func startDefaultQueue() {
         musicP.setQueue(with: .songs())
         musicP.prepareToPlay()
-        musicP.play()
+        //musicP.play()
     }
     
     func pauseMusic() {
         musicP.pause()
+        yeet.songName = "bet?"
     }
     
     func playMusic() {
