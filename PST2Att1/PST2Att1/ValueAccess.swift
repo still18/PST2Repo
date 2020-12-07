@@ -18,7 +18,10 @@ import CoreMotion
 //Permanent/Changing vars go here or at top of other classes
 let musicP = MPMusicPlayerApplicationController.applicationQueuePlayer
 var motion = CMMotionManager()
-var motion3 = CMDeviceMotion()
+//var motion3 = CMDeviceMotion()
+
+var tempAcc: Double = 0.0
+var postAcc: Double = 0.0
 
 var ilist: [Int] = []
 var moods: [String] = []
@@ -106,6 +109,57 @@ class ValueAccess {
             //let album = unit.albumTitle
             //let pID = unit.persistentID
             print("The song is -", song!, "- by:", artist!)
+        }
+    }
+    
+    func makeQueue(songArtistList: [Any]) {
+        print("\nQueueing placeholder for this info:")
+        print(songArtistList)
+        print("Such as:", songArtistList[0])
+    }
+    
+    func monitorMotion() {
+        print("\nStarting monitoring process...")
+        let _ = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { timer in
+            self.accelAfter()
+            let _ = Timer.scheduledTimer(withTimeInterval: 10.2, repeats: false) { timer in
+                print("Recorded interval:", postAcc)
+                if ((abs(xAcd - postAcc) > 2) && !buttonStatus) {
+                    print("Starting auto update!")
+                    xAcd = postAcc
+                    let result = self.calculate(firstTime: false)
+                    print("UPDATED RESULTS:")
+                    print(result)
+                    self.makeQueue(songArtistList: result)
+                } else {
+                    print("No updates necessary")
+                }
+            }
+        }
+    }
+    
+    func accelAfter(){
+        motion.deviceMotionUpdateInterval = 0.5
+        motion.startDeviceMotionUpdates(to: OperationQueue.current!) { (data, error) in
+            if let mD = data {
+                let x = mD.userAcceleration.x
+                let y = mD.userAcceleration.y
+                let z = mD.userAcceleration.z
+                let mag = sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2))
+                tempAcc = mag
+            }
+        }
+        var poss = [-99.9]
+        let bruh2 = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true) { timer in
+            poss.append(tempAcc)
+            //print(getMag())
+        }
+        let _ = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: false) { timer in
+            let idk = poss.max()!
+            print("\nMax value in last 10 seconds:", idk)
+            postAcc = idk
+            motion.stopDeviceMotionUpdates()
+            bruh2.invalidate()
         }
     }
     
@@ -689,33 +743,19 @@ class ValueAccess {
 
         let moodSettings = assignMoods()
         let inputTempo = xTempo
-        let rmsInput = 0.75//CHANGE TO ACTUAL VAR
+        let rmsInput = xAcd
         let inputGenre = assignGenres()
         let activity = assignActivity()
+        print("\nInputed values:")
+        print(moodSettings)
+        print(inputTempo)
+        print(rmsInput)
+        print(inputGenre)
+        print(activity, "\n")
         
         //print(titles.count)
         return Mappings(moodSettings: moodSettings, inputTempo: inputTempo, rmsInput: rmsInput, inputGenre: inputGenre, activity: activity)
     }
-    
-    
-    
-    func tryFileStuff() {
-        
-        let file = "song_info1"
-        if let path = Bundle.main.path(forResource: file, ofType: "txt"){
-            do {
-                let data = try String(contentsOfFile: path, encoding: .utf8)
-                let myStrings = data.components(separatedBy: .newlines)
-                let text = myStrings.joined(separator: "\n")
-                print("\(text)")
-            } catch {
-                print(error)
-            }
-        }
-        
-        
-    }
-    
     
     
 }
