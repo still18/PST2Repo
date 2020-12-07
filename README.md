@@ -24,10 +24,10 @@ playback music based on the mood of the user and accelerometer data.
  haven't already done so, you will you need to set up your AppleID and phone using the below links:
  - https://help.apple.com/xcode/mac/current/#/devaf282080a
  - https://help.apple.com/xcode/mac/current/#/dev23aab79b4
- * After your XCode is linked with your AppleID, you can plug in your phone. The final step before running the app is to move the txt file you created to the
- directory. You can either drag it from Finder or use the plus (+) arrow at the bottom (make sure "copy items if needed" is selected). You will want to name
- your txt file "my_song_info.txt" (otherwise you'll have to change the code), and you may need to delete any existing files with the same name. You're then 
- finally ready to run the app by selecting the play button towards the top left (make sure your iPhone is selected as the target device). The first time it is
- run will take longer to download, and you may get one or two popups asking for permission to use your media library. Once you have run the app that one time 
- you should be able to easily unplug the phone and run the app from the home screen. For questions about specific questions about the app installation, consult
- some of Apple's websites, or contact the main developer, Sean, at his email above. 
+ * After your XCode is linked with your AppleID, you can plug in your phone and open the project file found in the PST2Att1 folder.  The final step before running
+ the app is to move the txt file you created to the  directory. You can either drag it from Finder or use the plus (+) arrow at the bottom (make sure "copy items
+ if needed" is selected). Make sure your file is still named as "my_song_info.txt" (otherwise you'll have to change the code), and you may need to delete any 
+ existing files with the same name. You're then finally ready to run the app by selecting the play button towards the top left (make sure your iPhone is selected as 
+ the target device). The first time it is run will take longer to download, and you may get one or two popups asking for permission to use your media library. Once  
+ you have run the app that one time you should be able to easily unplug the phone and run the app from the home screen. For questions about specific questions about 
+ the app installation, consult some of Apple's websites, or contact the main developer, Sean, at his email above. 
