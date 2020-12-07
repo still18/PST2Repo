@@ -59,10 +59,8 @@ struct PlaybackView: View {
                             if (playerPaused) {
                                 self.playerPaused.toggle()
                                 VA.skipToPrevSong()
-                                //getCurrentSong()
                             } else {
                                 VA.skipToPrevSong()
-                                //getCurrentSong()
                             }
                         }
                     }) {
@@ -77,13 +75,11 @@ struct PlaybackView: View {
                             playbackAlert.toggle()
                         } else {
                             self.playerPaused.toggle()
-                            //print(playerPaused)
                             if self.playerPaused {
                                 VA.pauseMusic()
                                 xPP = playerPaused
                             } else {
                                 VA.playMusic()
-                                //getCurrentSong()
                                 if (firstTimePlaying) {
                                     firstTimePlaying = false
                                     getCurrentSong()

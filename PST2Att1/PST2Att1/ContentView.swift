@@ -25,7 +25,6 @@ var initialSet: Bool = false
 var buttonStatus: Bool = false
 
 struct ContentView: View {
-    //@ObservedObject var data = MyData()
     @State var tempo2 : Double = 120
     
     @State var buttonText : String = "Set my choices!"
@@ -69,14 +68,6 @@ struct ContentView: View {
         return self.accelmag
     }
     
-    func timerTest() {
-        print("-before timer-")
-        let tester = Timer.scheduledTimer(withTimeInterval: 5, repeats: false) { timer in
-            print("-within timer-")
-        }
-        print("-after timer-")
-    }
-    
     func exportAccelMag() {
         motion.deviceMotionUpdateInterval = 0.5
         motion.startDeviceMotionUpdates(to: OperationQueue.current!) { (data, error) in
@@ -91,12 +82,11 @@ struct ContentView: View {
         var poss = [-99.9]
         let bruh = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true) { timer in
             poss.append(getMag())
-            //print(getMag())
         }
         let _ = Timer.scheduledTimer(withTimeInterval: 4.0, repeats: false) { timer in
             xAcd = poss.max()!
-            print("Max value in last 4 seconds:")//delete this and following 2 lines as well
-            print(xAcd)
+            //print("Max value in last 4 seconds:")
+            //print(xAcd)
             accelmag = xAcd
             motion.stopDeviceMotionUpdates()
             bruh.invalidate()
@@ -245,28 +235,30 @@ struct ContentView: View {
                 //Update
                 VStack() {
                     
-                    //Text("Press here to update your choices").font(.custom("Big Caslon", size: 22)).fontWeight(.bold)
                     Spacer().frame(height: 10)
                     HStack() {
                         
                         Button(action: {
+                            
+                            //Make sure genre is selected
                             if ((!g1 && !g2 && !g3 && !g4 && !g5 && !g6 && !g7 && !g8)) {
                                 showingAlert.toggle()
                             } else {
                                 buttonStatus = true
                                 buttonText = "Processing..."
+                                
+                                //Start external accel timer and button timer
                                 self.exportAccelMag()
                                 let _ = Timer.scheduledTimer(withTimeInterval: 5, repeats: false) { timer in
+                                    
                                     initialSet = true
+                                    
                                     //"Export" values to global variables
                                     self.exportTempo()
                                     self.exportBools()
                                     self.exportSelection()
-                                    //self.startAccel()
-                                    //self.exportAccelMag()
-                                    //self.stopAccel()
-                                    //self.timerTest()
                                     
+                                    /*
                                     //Below prints out all current values
                                     //Just for the console, no affect on the app
                                     print("\n\nValues of current measureable elements:")
@@ -287,11 +279,15 @@ struct ContentView: View {
                                     
                                     //Songs
                                     VA.musicPrinter()
+                                    print(VA.musicNameComp())
+                                    */
                                     
-                                    //VA Stuff
-                                    let buttRes = VA.calculate(firstTime: firstTimeAlg)
-                                    print(buttRes)
-                                    VA.makeQueue(songArtistList: buttRes)
+                                    //VA Stuff: runs actual mapping and sets songs
+                                    let butRes = VA.calculate(firstTime: firstTimeAlg)
+                                    //print(butRes)
+                                    VA.makeQueue(songArtistList: butRes)
+                                    
+                                    //Starts monitoring accelerometer for large changes, waits extra minute the first time
                                     if (firstTimeAlg) {
                                         let _ = Timer.scheduledTimer(withTimeInterval: 60, repeats: false) { timer in
                                             VA.monitorMotion()
@@ -302,6 +298,7 @@ struct ContentView: View {
                                     buttonStatus = false
                                     
                                 }
+                                //revert button text
                                 let _ = Timer.scheduledTimer(withTimeInterval: 6.5, repeats: false) { timer in
                                     buttonText = "Update my choices!"
                                 }
@@ -314,18 +311,12 @@ struct ContentView: View {
                      
                     }
                     Spacer().frame(height: 20)
-                    /*
-                    Text("\(Double(accelx))")
-                    Text("\(Double(accely))")
-                    Text("\(Double(accelz))")
-                    Text("\(Double(accelmag))").font(.headline)
-                    */
                 }
               
                 
             }
     
-        }/*.frame(width: 500).background(SwiftUI.Color.primary.edgesIgnoringSafeArea(.all))*/
+        }
         .alert(isPresented: $showingAlert) {
             Alert(title: Text("Attention!"), message: Text("Please select at least one genre."), dismissButton: .default(Text("OK!")))
         }
@@ -333,6 +324,7 @@ struct ContentView: View {
     }
 }
 
+//Button styling
 struct NeumorphicButtonStyle: ButtonStyle {
     var bgColor: Color
 
@@ -342,13 +334,9 @@ struct NeumorphicButtonStyle: ButtonStyle {
             .background(
                 ZStack {
                     RoundedRectangle(cornerRadius: 10, style: .continuous)
-                        /*
-                        .shadow(color: .white, radius: configuration.isPressed ? 7: 10, x: configuration.isPressed ? 2: 2, y: configuration.isPressed ? 2: 2)
-                        .shadow(color: .white, radius: configuration.isPressed ? 7: 10, x: configuration.isPressed ? -1: -1, y: configuration.isPressed ? -1: -1)
-                        .shadow(color: .gray, radius: configuration.isPressed ? 7: 10, x: configuration.isPressed ? 1: 1, y: configuration.isPressed ? 1: 1)
-                        .blendMode(.overlay)*/
+                        
                     RoundedRectangle(cornerRadius: 10, style: .continuous)
-                        .fill(bgColor)/*.border(bgColor)*/
+                        .fill(bgColor)
                 }
         )
             .scaleEffect(configuration.isPressed ? 0.95: 1)
@@ -365,204 +353,3 @@ struct ContentView_Previews: PreviewProvider {
 }
 
 
-    
-
-
-
-
-
-
-
-//This stuff below is just test stuff, it's not important to our intial project it's just for reference
-/*
-//Above:
- var y : Int = 0
- @State var yes = String(y)
-
- 
- 
-VStack(/*alignment: .leading*/) {
-Text("Hello other teammates")
-    .font(.title)
-    .fontWeight(.black)
-    .foregroundColor(Color.yellow)
-HStack {
-    Text("Here is some test UI")
-        .font(.subheadline)
-        .fontWeight(.medium)
-        .foregroundColor(Color.purple)
-    Text("And more here")
-        .font(.subheadline)
-        .foregroundColor(Color.blue)
-}
-}
-Text(yes).padding()
-Button(action: {y = y + 1
-    self.yes = String(y)
-}) {
-Text("Press 4 fun")
-}
-
- */
-/*
-
-Picker(selection: .constant(33), label: Text("")) {
-Text("Option 1").tag(11)
-Text("Option 2").tag(22)
-Text("Option 3").tag(33)
-Text("Option 4").tag(44)
-Text("Option 5").tag(55)
-}*/
-
-
-
-
-
-
-
-/*
-    //Eli's recorder stuff goes in this object
-    VStack() {
-        List(self.audios,id: \.self){i in
-        
-        // printing only file name...
-        
-        Text(i.relativeString)
-        }
-    
-                        Button(action: {
-                            
-                            // Now going to record audio...
-                            // Intialization...
-                            // Were going to store audio in document directory...
-                            
-                            do{
-                                
-                                if self.record{
-                                    // Already Started Recording means stopping and saving...
-                                    self.recorder.stop()
-                                    self.record.toggle()
-                                    // updating data for every record...
-                                    self.getAudios()
-                                    return
-                                }
-                                
-                                let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-                                // same file name...
-                                // it is updating based on audio count...
-                                let filName = url.appendingPathComponent("recording.m4a")
-                                let settings = [
-                                
-                                    AVFormatIDKey : Int(kAudioFormatMPEG4AAC),
-                                    AVSampleRateKey : 44100,
-                                    AVNumberOfChannelsKey : 2,
-                                    AVEncoderAudioQualityKey : AVAudioQuality.high.rawValue
-                                
-                                ]
-                                
-                                self.recorder = try AVAudioRecorder(url: filName, settings: settings)
-                                self.recorder.record()
-                                self.record.toggle()
-                                
-                            }
-                            catch{
-                                print(error.localizedDescription)
-                            }
-                        
-                        }) {
-                            
-                            ZStack{
-                                Circle()
-                                    .fill(Color.red)
-                                    .frame(width: 70, height: 70)
-                                if self.record{
-                                    
-                                    Circle()
-                                        .stroke(Color.black, lineWidth: 6)
-                                        .frame(width: 85, height: 85)
-                                }
-                            }
-                        }
-                        .padding(.vertical, 25)
-                    }
-                    .navigationBarTitle("Record Audio")
-                }
-                .alert(isPresented: self.$alert, content: {
-                    Alert(title: Text("Error"), message: Text("Enable Acess"))
-                })
-                .onAppear {
-                    
-                    do{
-                        // Intializing...
-                        self.session = AVAudioSession.sharedInstance()
-                        try self.session.setCategory(.playAndRecord)
-                        // requesting permission
-                        // for this we require microphone usage description in info.plist...
-                        self.session.requestRecordPermission { (status) in
-                            if !status{
-                                // error msg...
-                                self.alert.toggle()
-                            }
-                            else{
-                                // if permission granted means fetching all data...
-                                self.getAudios()
-                            }
-                        }
-                        
-                    }
-                    catch{
-                        print(error.localizedDescription)
-                    }
-                }
-            }
-
-            
-            func getAudios(){
-                
-                do{
-                    
-                    let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-                    print("url:")
-                    print(url)
-                    // fetch all data from document directory...
-                    let result = try FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: nil, options: .producesRelativePathURLs)
-                    print("result:")
-                    print(result)
-                    
-                    let urlString = try String(contentsOf: url)
-                    let testThing = try FileManager.default.contentsOfDirectory(atPath: urlString)
-                    print("test result: ")
-                    print(testThing)
-                    
-                    // updated means remove all old data..
-                    self.audios.removeAll()
-                    for i in result{
-                        self.audios.append(i)
-                    }
-                }
-                catch{
-                    print(error.localizedDescription)
-                }
-            }
-        }*/
-
-
-
-/*
- func startAccel() {
-     motion.deviceMotionUpdateInterval = 0.5
-     motion.startDeviceMotionUpdates(to: OperationQueue.current!) { (data, error) in
-         if let mD = data {
-             self.accelx = mD.userAcceleration.x
-             self.accely = mD.userAcceleration.y
-             self.accelz = mD.userAcceleration.z
-             self.accelmag = sqrt(pow(self.accelx, 2) + pow(self.accely, 2) + pow(self.accelz, 2))
-             xAcd = self.accelmag
-         }
-     }
- }
- 
- func stopAccel() {
-     motion.stopDeviceMotionUpdates()
- }
- */
