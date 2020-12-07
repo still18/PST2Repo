@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		56D824B325550421004B404C /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56D824B225550421004B404C /* Accelerate.framework */; };
-		60389DA4257C3DB2007F9EE8 /* big_test2_song_info.txt in Resources */ = {isa = PBXBuildFile; fileRef = 60389DA3257C3DB2007F9EE8 /* big_test2_song_info.txt */; };
 		605DB45F2536A88D004274D5 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 605DB45E2536A88D004274D5 /* MediaPlayer.framework */; };
 		608E03C7255F63B40016AF27 /* ValueAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608E03C6255F63B40016AF27 /* ValueAccess.swift */; };
 		608E03CC255F71520016AF27 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 608E03CB255F71520016AF27 /* ViewController.swift */; };
@@ -24,6 +23,7 @@
 		60A4CC94251D73F3001BEA84 /* PST2Att1Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A4CC93251D73F3001BEA84 /* PST2Att1Tests.swift */; };
 		60A4CC9F251D73F4001BEA84 /* PST2Att1UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60A4CC9E251D73F4001BEA84 /* PST2Att1UITests.swift */; };
 		60E88CB7252FEE4B0006607E /* SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60E88CB6252FEE4B0006607E /* SwiftUIView.swift */; };
+		60FA6D12257E893D00BE318B /* my_song_info.txt in Resources */ = {isa = PBXBuildFile; fileRef = 60FA6D11257E893D00BE318B /* my_song_info.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,7 +46,6 @@
 /* Begin PBXFileReference section */
 		56D824B225550421004B404C /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		6001B6B32551077D0066D6EF /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
-		60389DA3257C3DB2007F9EE8 /* big_test2_song_info.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = big_test2_song_info.txt; sourceTree = "<group>"; };
 		605DB45E2536A88D004274D5 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		608E03C6255F63B40016AF27 /* ValueAccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValueAccess.swift; sourceTree = "<group>"; };
 		608E03CB255F71520016AF27 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -68,6 +67,7 @@
 		60A4CC9E251D73F4001BEA84 /* PST2Att1UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PST2Att1UITests.swift; sourceTree = "<group>"; };
 		60A4CCA0251D73F4001BEA84 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		60E88CB6252FEE4B0006607E /* SwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIView.swift; sourceTree = "<group>"; };
+		60FA6D11257E893D00BE318B /* my_song_info.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = my_song_info.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,7 +140,7 @@
 				608E03C6255F63B40016AF27 /* ValueAccess.swift */,
 				60E88CB6252FEE4B0006607E /* SwiftUIView.swift */,
 				60A4CC82251D73F3001BEA84 /* Assets.xcassets */,
-				60389DA3257C3DB2007F9EE8 /* big_test2_song_info.txt */,
+				60FA6D11257E893D00BE318B /* my_song_info.txt */,
 				60A4CC87251D73F3001BEA84 /* LaunchScreen.storyboard */,
 				60A4CC8A251D73F3001BEA84 /* Info.plist */,
 				60A4CC84251D73F3001BEA84 /* Preview Content */,
@@ -280,7 +280,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				60A4CC89251D73F3001BEA84 /* LaunchScreen.storyboard in Resources */,
-				60389DA4257C3DB2007F9EE8 /* big_test2_song_info.txt in Resources */,
+				60FA6D12257E893D00BE318B /* my_song_info.txt in Resources */,
 				60A4CC86251D73F3001BEA84 /* Preview Assets.xcassets in Resources */,
 				60A4CC83251D73F3001BEA84 /* Assets.xcassets in Resources */,
 			);

@@ -20,7 +20,9 @@ var xTempo: Double = -1
 var xBool: [Bool] = [false, false, false, false, false, false, false, false, false, false, false, false]
 var happenActions = ["Studying", "Car Ride", "Working Out", "With Friends", "In a Crowd"]
 var xSelection: Int = -1
-var xAcd: Double = 0.75
+var xAcd: Double = 0.0
+var initialSet: Bool = false
+var buttonStatus: Bool = false
 
 struct ContentView: View {
     //@ObservedObject var data = MyData()
@@ -49,6 +51,7 @@ struct ContentView: View {
     
     @State var selectedAction = 2
     @State var showingAlert = false
+    @State var firstTimeAlg = true
     
     func exportTempo() {
         xTempo = tempo2
@@ -66,6 +69,14 @@ struct ContentView: View {
         return self.accelmag
     }
     
+    func timerTest() {
+        print("-before timer-")
+        let tester = Timer.scheduledTimer(withTimeInterval: 5, repeats: false) { timer in
+            print("-within timer-")
+        }
+        print("-after timer-")
+    }
+    
     func exportAccelMag() {
         motion.deviceMotionUpdateInterval = 0.5
         motion.startDeviceMotionUpdates(to: OperationQueue.current!) { (data, error) in
@@ -80,11 +91,11 @@ struct ContentView: View {
         var poss = [-99.9]
         let bruh = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true) { timer in
             poss.append(getMag())
-            print(getMag())
+            //print(getMag())
         }
-        let _ = Timer.scheduledTimer(withTimeInterval: 15.0, repeats: false) { timer in
+        let _ = Timer.scheduledTimer(withTimeInterval: 4.0, repeats: false) { timer in
             xAcd = poss.max()!
-            print("Max value in last 5 seconds:")//delete this and following 2 lines as well
+            print("Max value in last 4 seconds:")//delete this and following 2 lines as well
             print(xAcd)
             accelmag = xAcd
             motion.stopDeviceMotionUpdates()
@@ -242,41 +253,58 @@ struct ContentView: View {
                             if ((!g1 && !g2 && !g3 && !g4 && !g5 && !g6 && !g7 && !g8)) {
                                 showingAlert.toggle()
                             } else {
-                                buttonText = "Update my choices!"
-                                
-                                //"Export" values to global variables
-                                self.exportTempo()
-                                self.exportBools()
-                                self.exportSelection()
-                                //self.startAccel()
-                                //self.exportAccelMag()
-                                //self.stopAccel()
-                                
-                                //Below prints out all current values
-                                //Just for the console, no affect on the app
-                                print("\n\nValues of current measureable elements:")
-                                
-                                //Selector value
-                                print("\nCurrent seleceted action...")
-                                let cac = happenActions[xSelection]
-                                //cac uses global index with the possible options
-                                print(cac)
-                                
-                                //Booleans
-                                print("\nBoolean values...")
-                                print(xBool)
-                                
-                                //Tempo
-                                print("\nSelected tempo...")
-                                print(xTempo)
-                                
-                                //Songs
-                                VA.musicPrinter()
-                                
-                                //Test stuff again
-                                //VA.tryFileStuff()
-                                print("return statement below: ")
-                                print(VA.calculate())
+                                buttonStatus = true
+                                buttonText = "Processing..."
+                                self.exportAccelMag()
+                                let _ = Timer.scheduledTimer(withTimeInterval: 5, repeats: false) { timer in
+                                    initialSet = true
+                                    //"Export" values to global variables
+                                    self.exportTempo()
+                                    self.exportBools()
+                                    self.exportSelection()
+                                    //self.startAccel()
+                                    //self.exportAccelMag()
+                                    //self.stopAccel()
+                                    //self.timerTest()
+                                    
+                                    //Below prints out all current values
+                                    //Just for the console, no affect on the app
+                                    print("\n\nValues of current measureable elements:")
+                                    
+                                    //Selector value
+                                    print("\nCurrent seleceted action...")
+                                    let cac = happenActions[xSelection]
+                                    //cac uses global index with the possible options
+                                    print(cac)
+                                    
+                                    //Booleans
+                                    print("\nBoolean values...")
+                                    print(xBool)
+                                    
+                                    //Tempo
+                                    print("\nSelected tempo...")
+                                    print(xTempo)
+                                    
+                                    //Songs
+                                    VA.musicPrinter()
+                                    
+                                    //VA Stuff
+                                    let buttRes = VA.calculate(firstTime: firstTimeAlg)
+                                    print(buttRes)
+                                    VA.makeQueue(songArtistList: buttRes)
+                                    if (firstTimeAlg) {
+                                        let _ = Timer.scheduledTimer(withTimeInterval: 60, repeats: false) { timer in
+                                            VA.monitorMotion()
+                                        }
+                                    }
+                                    self.firstTimeAlg = false
+                                    buttonText = "Done!"
+                                    buttonStatus = false
+                                    
+                                }
+                                let _ = Timer.scheduledTimer(withTimeInterval: 6.5, repeats: false) { timer in
+                                    buttonText = "Update my choices!"
+                                }
                             }
 
                         }) {
@@ -299,7 +327,7 @@ struct ContentView: View {
     
         }/*.frame(width: 500).background(SwiftUI.Color.primary.edgesIgnoringSafeArea(.all))*/
         .alert(isPresented: $showingAlert) {
-            Alert(title: Text("Attention!"), message: Text("Please select at least one genre"), dismissButton: .default(Text("OK")))
+            Alert(title: Text("Attention!"), message: Text("Please select at least one genre."), dismissButton: .default(Text("OK!")))
         }
 
     }
