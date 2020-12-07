@@ -18,6 +18,7 @@ playback music based on the mood of the user and accelerometer data.
 
 ## Download Instructions
 
+* To ensure that the metadata for the local library matches that hosted on MusicBrainz & AcousticBrainz, download Picard from MusicBrainz and follow the instructions within.  https://picard.musicbrainz.org/
 * To create the txt file, download the pyacoustid folder, "my_song_info.txt", and AcousticBrainz_extraction.py.  Once downloaded, move the file titled "fpcalc" to the directory "/usr/local/bin" on your macOS device.  In the AcousticBrainz_extraction.py file, change the variable "base_path" to the directory of your music library.  Once this is complete, run the AcousticBrainz_extraction.py script.  This may take a while, but will populate the empty "my_song_info.txt" file with the information obtained from MusicBrainz and AcousticBrainz.
 * Once you have your txt file, make sure you have the most recent version of XCode and a relativily up-to-date iPhone with the music already loaded on. If you
  haven't already done so, you will you need to set up your AppleID and phone using the below links:
