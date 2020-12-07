@@ -58,21 +58,11 @@ extension Array {
 }
 
 
-//Functions and temporary vars go here
+//Backend Functions go here
 class ValueAccess {
-    
-    //@ObservedObject var yeet = SongPlaying()
-    
-    
-    func startDefaultQueue() {
-        musicP.setQueue(with: .songs())
-        musicP.prepareToPlay()
-        //musicP.play()
-    }
-    
+        
     func pauseMusic() {
         musicP.pause()
-        //yeet.songName = "bet?"
     }
     
     func playMusic() {
@@ -89,21 +79,9 @@ class ValueAccess {
         musicP.play()
     }
     
-    func expirPlay() {
-        let mediaItems = MPMediaQuery.songs().items
-        let oneItem = mediaItems![2]
-        print("\nThe selected song is:", oneItem.title!)
-        let twoItem = mediaItems![6]
-        print("The next selected song is:", twoItem.title!)
-        let tempSongs = MPMediaItemCollection.init(items: [oneItem, twoItem])
-        musicP.setQueue(with: tempSongs)
-        musicP.prepareToPlay()
-    }
-    
+    //Will print all songs in console
     func musicPrinter() {
-        //Song names
         let mediaItems = MPMediaQuery.songs().items
-        //print(mediaItems)
         print("\nSong info...")
         for case let unit in mediaItems! {
             let song = unit.title
@@ -114,31 +92,57 @@ class ValueAccess {
         }
     }
     
+    //Checks and sees if there are any dublicate names; returns true if unique
+    func musicNameComp() -> Bool {
+        let mediaItems = MPMediaQuery.songs().items
+        var names: [String] = []
+        for case let unit in mediaItems! {
+            names.append(unit.title!)
+        }
+        var set = Set<String>()
+                for e in names {
+                    if set.insert(e).inserted == false { return false }
+                }
+                return true
+    }
+    
+    //Takes input from mapping and sets the playback queue
+    //If the songs are not unique in name it consults artist name to cross reference
     func makeQueue(songArtistList: [Any]) {
         
         if (!playbackFirst) {
             pauseMusic()
         }
         var mutableThing = songArtistList
+        let unique = self.musicNameComp()
+        
         //first time through
         let firstSong = mutableThing[0] as! [String]
         let t1 = MPMediaPropertyPredicate(value: firstSong[0], forProperty: MPMediaItemPropertyTitle, comparisonType: .contains)
-        //let a1 = MPMediaPropertyPredicate(value: firstSong[1], forProperty: MPMediaItemPropertyArtist, comparisonType: .contains)
-        let ffls = Set([t1])
+        let a1 = MPMediaPropertyPredicate(value: firstSong[1], forProperty: MPMediaItemPropertyArtist, comparisonType: .contains)
+        var ffls = Set([t1])
+        if (!unique) {
+            ffls = Set([t1, a1])
+        }
         let iniQuery = MPMediaQuery(filterPredicates: ffls)
-        print(iniQuery)
+        //print(iniQuery)
         musicP.setQueue(with: iniQuery)
         musicP.prepareToPlay()
         let maxCount = mutableThing.count
         mutableThing.removeFirst()
         var count = 1
+        
+        //other times through
         for others in mutableThing {
             let otherSong = others as! [String]
             let ti = MPMediaPropertyPredicate(value: otherSong[0], forProperty: MPMediaItemPropertyTitle, comparisonType: .contains)
-            //let ai = MPMediaPropertyPredicate(value: otherSong[1], forProperty: MPMediaItemPropertyArtist, comparisonType: .contains)
-            let ofls = Set([ti])
+            let ai = MPMediaPropertyPredicate(value: otherSong[1], forProperty: MPMediaItemPropertyArtist, comparisonType: .contains)
+            var ofls = Set([ti])
+            if (!unique) {
+                ofls = Set([ti, ai])
+            }
             let othQuery = MPMediaQuery(filterPredicates: ofls)
-            print(othQuery)
+            //print(othQuery)
             let plz = MPMusicPlayerMediaItemQueueDescriptor.init(query: othQuery)
             musicP.append(plz)
             musicP.prepareToPlay()
@@ -153,26 +157,28 @@ class ValueAccess {
         
     }
     
+    //Takes a 10 second sample of data every minute to see if it has changed dramatically
     func monitorMotion() {
-        print("\nStarting monitoring process...")
+        //print("\nStarting monitoring process...")
         let _ = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { timer in
             self.accelAfter()
             let _ = Timer.scheduledTimer(withTimeInterval: 10.2, repeats: false) { timer in
                 print("Recorded interval:", postAcc)
                 if ((abs(xAcd - postAcc) > 2) && !buttonStatus) {
-                    print("Starting auto update!")
+                    //print("Starting auto update!")
                     xAcd = postAcc
                     let result = self.calculate(firstTime: false)
-                    print("UPDATED RESULTS:")
-                    print(result)
+                    //print("UPDATED RESULTS:")
+                    //print(result)
                     self.makeQueue(songArtistList: result)
                 } else {
-                    print("No updates necessary")
+                    //print("No updates necessary")
                 }
             }
         }
     }
     
+    //helper function for above
     func accelAfter(){
         motion.deviceMotionUpdateInterval = 0.5
         motion.startDeviceMotionUpdates(to: OperationQueue.current!) { (data, error) in
@@ -187,21 +193,22 @@ class ValueAccess {
         var poss = [-99.9]
         let bruh2 = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true) { timer in
             poss.append(tempAcc)
-            //print(getMag())
         }
         let _ = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: false) { timer in
             let idk = poss.max()!
-            print("\nMax value in last 10 seconds:", idk)
+            //print("\nMax value in last 10 seconds:", idk)
             postAcc = idk
             motion.stopDeviceMotionUpdates()
             bruh2.invalidate()
         }
     }
     
+    //uses "exported" parameter values to assign activity for mapping
     func assignActivity() -> String {
         return happenActions[xSelection]
     }
     
+    //uses "exported" parameter values to assign genres for mapping
     func assignGenres() -> [String] {
         
         var chosen = [String]()
@@ -216,6 +223,7 @@ class ValueAccess {
         return chosen
     }
     
+    //uses "exported" parameter values to assign moods for mapping
     func assignMoods() -> [String] {
         var choice1 = ""
         if (!xBool[8]) {
@@ -248,6 +256,7 @@ class ValueAccess {
         return [choice1, choice2, choice3, choice4]
     }
     
+    //all "sortMood" functions are helper methods for calculate()
     func sortMoodAggressive(array: [Any]) -> [Any] {
         var out: [Any] = []
         for num in array.indices {
@@ -311,7 +320,6 @@ class ValueAccess {
         let Aggressive = new1
         return Aggressive
     }
-    
     func sortMoodElectronic(array: [Any]) -> [Any] {
         var out: [Any] = []
         for num in array.indices {
@@ -375,7 +383,6 @@ class ValueAccess {
         let Electronic = new1
         return Electronic
     }
-    
     func sortMoodHappy(array: [Any]) -> [Any] {
         var out: [Any] = []
         for num in array.indices {
@@ -439,8 +446,6 @@ class ValueAccess {
         let Happy = new1
         return Happy
     }
-    
-    
     func sortMoodParty(array: [Any]) -> [Any] {
         var out: [Any] = array
         for i in out.indices {
@@ -467,6 +472,7 @@ class ValueAccess {
         return Party
     }
     
+    //will refresh the possible songs to choose from
     func reloadSongs() {
         moods = loadFile()[0] as! [String]
         tempo = loadFile()[1] as! [String]
@@ -479,6 +485,7 @@ class ValueAccess {
         genre = loadFile()[8] as! [String]
     }
     
+    //called alongside reloadSongs() typically
     func removeUnec() {
         moods.removeAll { $0 == ", " }
         tempo.removeAll { $0 == ", " }
@@ -491,6 +498,7 @@ class ValueAccess {
         genre.removeAll { $0 == ", " }
     }
     
+    //loads txt file from scratch
     func loadFile() -> [Any] {
         var lines:[String] = []
         let filename = "my_song_info"
@@ -498,8 +506,6 @@ class ValueAccess {
             do {
                 let contents = try String(contentsOfFile: path, encoding: .utf8)
                 lines = contents.components(separatedBy: "\n")
-                //print("\"lines\" var:")
-                //print(lines)//remove later
             } catch {
                 print(error)
             }
@@ -538,21 +544,21 @@ class ValueAccess {
         return mbid_array
     }
     
+    //Runs mapping and outputs songs values
     func calculate(firstTime: Bool) -> [Any] {
         
 
         if (firstTime) {
             reloadSongs()
         }
-
         removeUnec()
 
         let num_songs: Int = titles.count
         if (firstTime) {
             maxAmount = num_songs
-            print("Max amount of songs: ", maxAmount)
+            //print("Max amount of songs: ", maxAmount)
         }
-        print("Songs to select from: ", num_songs)
+        //print("Songs to select from: ", num_songs)
         
         if (num_songs < ((3 * maxAmount) / 10)) {
             reloadSongs()
@@ -564,10 +570,8 @@ class ValueAccess {
         for i in 0...num_songs-1 {
             mood_array = mood_array + [Array(moods[(i*14)..<(i*14+14)])]
         }
-        //print(mood_array)
 
-        
-
+        //Runs the actual mapping
         func Mappings(moodSettings: [String], inputTempo: Double, rmsInput: Double, inputGenre: [String], activity: String) -> [Any]{
             
             //Sorts each songs mood values into each mood type
@@ -781,290 +785,20 @@ class ValueAccess {
         let rmsInput = xAcd
         let inputGenre = assignGenres()
         let activity = assignActivity()
+        /*
         print("\nInputed values:")
         print(moodSettings)
         print(inputTempo)
         print(rmsInput)
         print(inputGenre)
         print(activity, "\n")
+        print(titles.count)
+        */
         
-        //print(titles.count)
         return Mappings(moodSettings: moodSettings, inputTempo: inputTempo, rmsInput: rmsInput, inputGenre: inputGenre, activity: activity)
     }
     
     
 }
-
-
-
-
-
-
-
-
-
-
-
-/*
-func getAudioSamples(forResource: String,
-                            withExtension: String) -> (naturalTimeScale: CMTimeScale,
-                                                       data: [Float])? {
-    
-    guard let path = Bundle.main.url(forResource: forResource,
-                                     withExtension: withExtension) else {
-                                        return nil
-    }
-    
-    let asset = AVAsset(url: path.absoluteURL)
-    
-    guard
-        let reader = try? AVAssetReader(asset: asset),
-        let track = asset.tracks.first else {
-            return nil
-    }
-    
-    let outputSettings: [String: Int] = [
-        AVFormatIDKey: Int(kAudioFormatLinearPCM),
-        AVNumberOfChannelsKey: 1,
-        AVLinearPCMIsBigEndianKey: 0,
-        AVLinearPCMIsFloatKey: 1,
-        AVLinearPCMBitDepthKey: 32,
-        AVLinearPCMIsNonInterleaved: 1
-    ]
-    
-    let output = AVAssetReaderTrackOutput(track: track,
-                                          outputSettings: outputSettings)
-
-    reader.add(output)
-    reader.startReading()
-    
-    var samplesData = [Float]()
-    
-    while reader.status == .reading {
-        if
-            let sampleBuffer = output.copyNextSampleBuffer(),
-            let dataBuffer = CMSampleBufferGetDataBuffer(sampleBuffer) {
-            
-                let bufferLength = CMBlockBufferGetDataLength(dataBuffer)
-            
-                var data = [Float](repeating: 0,
-                                   count: bufferLength / 4)
-                CMBlockBufferCopyDataBytes(dataBuffer,
-                                           atOffset: 0,
-                                           dataLength: bufferLength,
-                                           destination: &data)
-            
-                samplesData.append(contentsOf: data)
-        }
-    }
-
-    return (naturalTimeScale: track.naturalTimeScale,
-            data: samplesData)
-}
-
-let samples: (naturalTimeScale: Int32, data: [Float]) = {
-    guard let samples = getAudioSamples(
-            forResource: "recording",
-            withExtension: "m4a") else {
-            fatalError("Unable to parse the audio resource.")
-    }
-
-    return samples
-}()*/
-
-
-//State vars before UI
-/*
- @State var tempo: Double =  120
- @State var g1: Bool = false
- @State var g2: Bool = true
- @State var g3: Bool = false
- @State var g4: Bool = true
- @State var g5: Bool = false
- @State var g6: Bool = true
- @State var g7: Bool = false
-
- @State var record = false
- // creating instance for recroding...
- @State var session : AVAudioSession!
- @State var recorder : AVAudioRecorder!
- @State var alert = false
- // Fetch Audios...
- @State var audios : [URL] = []
- */
-
-
-//UI STUFF
-/*
- VStack() {
-     
-    Spacer().frame(height: 50)
-     
-
-     VStack() {
-     Text("What are you doing right now?")
-         .font(.headline)
-         Picker(selection: .constant(3), label: Text("")) {
-     Text("Working out").tag(1)
-     Text("Car ride").tag(2)
-     Text("Studying").tag(3)
-     Text("Small group").tag(4)
-     Text("Large group").tag(5)
-     }
-     .padding(90.0)
-     .frame(width: 200.0, height: 180)
-     Spacer().frame(height: 0)
-     }
-
-     
-     
-     VStack() {
-     Text("Select the genres you'd like to hear")
-         .font(.headline)
-         
-
-        Toggle(isOn: $g1) {
-        Text("Rock")
-        }
-        .padding(.horizontal)
-        .frame(width: 250, height: 30)
-         
-        Toggle(isOn: $g2) {
-         Text("Jazz")
-         }
-         .padding(.horizontal)
-         .frame(width: 250, height: 30)
-         
-         Toggle(isOn: $g3) {
-         Text("Techno")
-         }
-         .padding(.horizontal)
-         .frame(width: 250, height: 30)
-     }
- }
-     
- VStack() {
-     Spacer().frame(height: 25)
-     Text("What sort of mood are you in?").font(.headline)
-         HStack() {
-             Text("Aggressive")
-             Toggle(isOn : $g4){ Text("a")
-                 
-         }.padding(.horizontal).frame(width: 50)
-             Text("  Relaxed    ")
-         }
-         HStack() {
-             Text("   Electronic")
-             Toggle(isOn: $g5) { Text("b")
-                 
-             }.padding(.horizontal).frame(width: 50)
-             Text("  Accoustic  ")
-         }
-         HStack() {
-             Text("     Happy")
-             Toggle(isOn: $g6) { Text("c")
-                 
-             }.padding(.horizontal).frame(width: 50)
-             Text("   Sad        ")
-         }
-         HStack() {
-             Text("      Big Party")
-             Toggle(isOn: $g7) { Text("d")
-                 
-             }.padding(.horizontal).frame(width: 50)
-             Text("  Small Group")
-         }
-     //.padding(-90.0)
-     //.frame(width: 200.0, height: 180)
-         Spacer().frame(height: 30)
-         VStack(){
-             
-             Text("Select your speed/tempo").font(.headline)
-             
-             Slider(value: $tempo, in: 40...200).frame(width: 300)
-             Text("\(Int(tempo))")
-             Spacer().frame(height: 20)
-             
-         }
-     }
- 
-     
- VStack() {
-     VStack() {
-         Text("Playback Controls").font(.headline)
-         Spacer().frame(height: 10)
-         Button(action: {musicP.setQueue(with: .songs())
-                     musicP.play()}) {
-             Text("Start")
-     }
-         VStack() {
-         Spacer().frame(height: 10)
-         Button(action: {
-             musicP.pause()
-             let mediaItems = MPMediaQuery.songs().items
-             print("Songs:")
-             //print(mediaItems)
-             for case let unit in mediaItems! {
-                 let saved = unit.title
-                 print(saved)
-             }
-         }) {
-             Text("Pause")
-         }
-         Spacer().frame(height: 10)
-         Button(action: {musicP.play()}) {
-             Text("Resume")
-         }
-     
-         Spacer().frame(height: 10)
-         Button(action: {musicP.skipToNextItem()
-             musicP.play()
-         }) {
-         Text("Next song")
-     }
-         Spacer().frame(height: 10)
-             Button(action: {musicP.skipToPreviousItem()
-                 musicP.play()
-             }){
-                 Text("Previous Song")
-             }
-     }
-     }
-     
-     VStack() {
-         Text("Accelerometer values: ")
-         //Put live updating values here
-         HStack() {
-             
-          
-         }
-     }
-   
- 
- /*
- var tester = songArtistList[0] as! [String]
- var idkman = type(of: tester)
- print(tester[0])
- print(type(of: tester))
- print(type(of: tester[0]))
- let albTF = MPMediaPropertyPredicate(value: "One Click Headshot", forProperty: MPMediaItemPropertyTitle, comparisonType: .contains)
- let albTF2 = MPMediaPropertyPredicate(value: "Come as You Are", forProperty: MPMediaItemPropertyTitle, comparisonType: .contains)
- //let filterSet = Set(allTitleFilters)
- let filterSet = Set([albTF])
- let query = MPMediaQuery(filterPredicates: filterSet)
- let filterSet2 = Set([albTF2])
- let query2 = MPMediaQuery(filterPredicates: filterSet2)
- print(query)
- print(query2)
- musicP.repeatMode = MPMusicRepeatMode.none
- musicP.setQueue(with: query)
- let plzzz = MPMusicPlayerMediaItemQueueDescriptor.init(query: query2)
- musicP.prepareToPlay()
- musicP.append(plzzz)*/
-     
-     
- }
- */
-
 
 
