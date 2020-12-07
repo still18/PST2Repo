@@ -258,7 +258,6 @@ struct ContentView: View {
                                 self.exportAccelMag()
                                 let _ = Timer.scheduledTimer(withTimeInterval: 5, repeats: false) { timer in
                                     initialSet = true
-                                    VA.startDefaultQueue()
                                     //"Export" values to global variables
                                     self.exportTempo()
                                     self.exportBools()
@@ -287,7 +286,7 @@ struct ContentView: View {
                                     print(xTempo)
                                     
                                     //Songs
-                                    //VA.musicPrinter()
+                                    VA.musicPrinter()
                                     
                                     //VA Stuff
                                     let buttRes = VA.calculate(firstTime: firstTimeAlg)

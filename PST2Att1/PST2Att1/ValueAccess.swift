@@ -22,6 +22,8 @@ var motion = CMMotionManager()
 
 var tempAcc: Double = 0.0
 var postAcc: Double = 0.0
+var playbackFirst: Bool = true
+var endSong: String = "~~~~~"
 
 var ilist: [Int] = []
 var moods: [String] = []
@@ -113,9 +115,42 @@ class ValueAccess {
     }
     
     func makeQueue(songArtistList: [Any]) {
-        print("\nQueueing placeholder for this info:")
-        print(songArtistList)
-        print("Such as:", songArtistList[0])
+        
+        if (!playbackFirst) {
+            pauseMusic()
+        }
+        var mutableThing = songArtistList
+        //first time through
+        let firstSong = mutableThing[0] as! [String]
+        let t1 = MPMediaPropertyPredicate(value: firstSong[0], forProperty: MPMediaItemPropertyTitle, comparisonType: .contains)
+        //let a1 = MPMediaPropertyPredicate(value: firstSong[1], forProperty: MPMediaItemPropertyArtist, comparisonType: .contains)
+        let ffls = Set([t1])
+        let iniQuery = MPMediaQuery(filterPredicates: ffls)
+        print(iniQuery)
+        musicP.setQueue(with: iniQuery)
+        musicP.prepareToPlay()
+        let maxCount = mutableThing.count
+        mutableThing.removeFirst()
+        var count = 1
+        for others in mutableThing {
+            let otherSong = others as! [String]
+            let ti = MPMediaPropertyPredicate(value: otherSong[0], forProperty: MPMediaItemPropertyTitle, comparisonType: .contains)
+            //let ai = MPMediaPropertyPredicate(value: otherSong[1], forProperty: MPMediaItemPropertyArtist, comparisonType: .contains)
+            let ofls = Set([ti])
+            let othQuery = MPMediaQuery(filterPredicates: ofls)
+            print(othQuery)
+            let plz = MPMusicPlayerMediaItemQueueDescriptor.init(query: othQuery)
+            musicP.append(plz)
+            musicP.prepareToPlay()
+            count = count + 1
+            if (count == maxCount) {
+                endSong = otherSong[0]
+            }
+        }
+        if (!playbackFirst || !xPP) {
+            musicP.play()
+        }
+        
     }
     
     func monitorMotion() {
@@ -458,7 +493,7 @@ class ValueAccess {
     
     func loadFile() -> [Any] {
         var lines:[String] = []
-        let filename = "big_test2_song_info"
+        let filename = "my_song_info"
         if let path = Bundle.main.path(forResource: filename, ofType: "txt"){
             do {
                 let contents = try String(contentsOfFile: path, encoding: .utf8)
@@ -519,7 +554,7 @@ class ValueAccess {
         }
         print("Songs to select from: ", num_songs)
         
-        if (num_songs < (maxAmount / 4)) {
+        if (num_songs < ((3 * maxAmount) / 10)) {
             reloadSongs()
             removeUnec()
         }
@@ -1005,6 +1040,27 @@ let samples: (naturalTimeScale: Int32, data: [Float]) = {
          }
      }
    
+ 
+ /*
+ var tester = songArtistList[0] as! [String]
+ var idkman = type(of: tester)
+ print(tester[0])
+ print(type(of: tester))
+ print(type(of: tester[0]))
+ let albTF = MPMediaPropertyPredicate(value: "One Click Headshot", forProperty: MPMediaItemPropertyTitle, comparisonType: .contains)
+ let albTF2 = MPMediaPropertyPredicate(value: "Come as You Are", forProperty: MPMediaItemPropertyTitle, comparisonType: .contains)
+ //let filterSet = Set(allTitleFilters)
+ let filterSet = Set([albTF])
+ let query = MPMediaQuery(filterPredicates: filterSet)
+ let filterSet2 = Set([albTF2])
+ let query2 = MPMediaQuery(filterPredicates: filterSet2)
+ print(query)
+ print(query2)
+ musicP.repeatMode = MPMusicRepeatMode.none
+ musicP.setQueue(with: query)
+ let plzzz = MPMusicPlayerMediaItemQueueDescriptor.init(query: query2)
+ musicP.prepareToPlay()
+ musicP.append(plzzz)*/
      
      
  }

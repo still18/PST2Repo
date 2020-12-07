@@ -8,6 +8,8 @@
 
 import SwiftUI
 
+var xPP: Bool = true
+
 struct PlaybackView: View {
     
     @State var playerPaused: Bool = true
@@ -18,9 +20,14 @@ struct PlaybackView: View {
     @State var playArt : String = "-"
     
     func getCurrentSong() {
-        let current = musicP.nowPlayingItem
-        self.playText = current?.title as! String
-        self.playArt = current?.artist as! String
+        let _ = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { timer in
+            let current = musicP.nowPlayingItem
+            self.playText = current?.title as! String
+            self.playArt = current?.artist as! String
+            if (self.playText == endSong) {
+                VA.makeQueue(songArtistList: VA.calculate(firstTime: false))
+            }
+        }
     }
     
     var body: some View {
@@ -52,10 +59,10 @@ struct PlaybackView: View {
                             if (playerPaused) {
                                 self.playerPaused.toggle()
                                 VA.skipToPrevSong()
-                                getCurrentSong()
+                                //getCurrentSong()
                             } else {
                                 VA.skipToPrevSong()
-                                getCurrentSong()
+                                //getCurrentSong()
                             }
                         }
                     }) {
@@ -73,9 +80,15 @@ struct PlaybackView: View {
                             //print(playerPaused)
                             if self.playerPaused {
                                 VA.pauseMusic()
+                                xPP = playerPaused
                             } else {
                                 VA.playMusic()
-                                getCurrentSong()
+                                //getCurrentSong()
+                                if (firstTimePlaying) {
+                                    firstTimePlaying = false
+                                    getCurrentSong()
+                                }
+                                xPP = playerPaused
                             }
                         }
                     }) {
